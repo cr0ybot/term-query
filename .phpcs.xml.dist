@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<ruleset name="cr0ybot/term-query">
+	<rule ref="Squiz.Commenting.FunctionComment">
+		<properties>
+			<property name="skipIfInheritdoc" value="true" />
+		</properties>
+	</rule>
+
+	<rule ref="WordPress">
+		<!-- Exclude WordPress class file name conventions -->
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+	</rule>
+</ruleset>

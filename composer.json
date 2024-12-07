@@ -1,0 +1,27 @@
+{
+	"name": "cr0ybot/term-query",
+	"description": "Query and display taxonomy terms.",
+	"type": "project",
+	"license": "GPL-3.0-or-later",
+	"autoload": {
+		"psr-4": {
+			"cr0ybot\\Term_Query\\": "lib/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Cory Hughart",
+			"email": "cory@coryhughart.com"
+		}
+	],
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"squizlabs/php_codesniffer": "^3.10",
+		"wp-coding-standards/wpcs": "^3.1"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
+}
