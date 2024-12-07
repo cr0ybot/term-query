@@ -25,11 +25,11 @@ const orderOptions = [
 	},
 	{
 		label: __( 'Newest to oldest' ),
-		value: 'term_id/desc',
+		value: 'id/desc',
 	},
 	{
 		label: __( 'Oldest to newest' ),
-		value: 'term_id/asc',
+		value: 'id/asc',
 	},
 ];
 
