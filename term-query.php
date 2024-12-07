@@ -14,6 +14,8 @@
  * @package term-query
  */
 
+namespace cr0ybot\Term_Query;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
