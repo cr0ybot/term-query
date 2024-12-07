@@ -62,10 +62,16 @@ export default function QueryPlaceholder( {
 							<SelectControl
 								label={ __( 'Select taxonomy', 'term-query' ) }
 								value={ selectedTaxonomy }
-								options={ taxonomies?.map( ( { slug, name } ) => ( {
-									value: slug,
-									label: name,
-								} ) ) }
+								options={ [
+									{
+										value: '',
+										label: __( 'Select a taxonomy', 'term-query' ),
+									},
+									...taxonomies?.map( ( { slug, name } ) => ( {
+										value: slug,
+										label: name,
+									} ) ),
+								]}
 								onChange={ ( value ) => {
 									setSelectedTaxonomy( value );
 								} }
