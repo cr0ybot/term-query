@@ -91,7 +91,7 @@ export default function StickyTermsControl( { taxonomy, stickyTerms, onChange } 
 	}, [ stickyTerms, existingTerms ] );
 	// Update suggestions only when the query has resolved.
 	useEffect( () => {
-		if ( ! searchHasResolved ) return;
+		if ( ! searchHasResolved || ! searchResults ) return;
 		setSuggestions( searchResults.map( ( result ) => result.name ) );
 	}, [ searchResults, searchHasResolved ] );
 	const onTermsChange = ( newTermValues ) => {
