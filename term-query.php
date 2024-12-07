@@ -6,7 +6,8 @@
  * Requires at least: 6.6
  * Requires PHP:      7.2
  * Version:           0.1.0
- * Author:            cr0ybot
+ * Author:            Cory Hughart
+ * Author URI:        https://coryhughart.com
  * License:           GPL-3.0-or-later
  * License URI:       (https://www.gnu.org/licenses/gpl-3.0.html)
  * Text Domain:       term-query
