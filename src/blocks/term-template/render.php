@@ -78,7 +78,7 @@ if ( empty( $terms ) ) {
 
 $classnames = '';
 if ( isset( $block->context['term-query/displayLayout'] ) && isset( $block->context['term-query/query'] ) ) {
-	if ( isset( $block->context['term-query/displayLayout']['type'] ) && 'flex' === $block->context['cr0ybot/displayLayout']['type'] ) {
+	if ( isset( $block->context['term-query/displayLayout']['type'] ) && 'flex' === $block->context['term-query/displayLayout']['type'] ) {
 		$classnames = "is-flex-container columns-{$block->context['term-query/displayLayout']['columns']}";
 	}
 }

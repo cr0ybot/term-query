@@ -26,13 +26,13 @@ const TEMPLATE = [
 		metadata: {
 			bindings: {
 				url: {
-					source: 'cr0ybot/term',
+					source: 'term-query/term',
 					args: {
 						'key': 'image',
 					},
 				},
 				alt: {
-					source: 'cr0ybot/term',
+					source: 'term-query/term',
 					args: {
 						'key': 'imageAlt',
 					},
@@ -44,7 +44,7 @@ const TEMPLATE = [
 		metadata: {
 			bindings: {
 				content: {
-					source: 'cr0ybot/term',
+					source: 'term-query/term',
 					args: {
 						'key': 'name',
 					},
@@ -56,7 +56,7 @@ const TEMPLATE = [
 		metadata: {
 			bindings: {
 				content: {
-					source: 'cr0ybot/term',
+					source: 'term-query/term',
 					args: {
 						'key': 'description',
 					},
@@ -70,7 +70,7 @@ const TEMPLATE = [
 			metadata: {
 				bindings: {
 					url: {
-						source: 'cr0ybot/term',
+						source: 'term-query/term',
 						args: {
 							'key': 'url',
 						},
@@ -81,7 +81,7 @@ const TEMPLATE = [
 	] ],
 ];
 
-function PostTemplateInnerBlocks( { classList } ) {
+function TermTemplateInnerBlocks( { classList } ) {
 	const innerBlocksProps = useInnerBlocksProps(
 		{ className: clsx( 'wp-block-term', classList ) },
 		{ template: TEMPLATE, __unstableDisableLayoutClassNames: true }
@@ -89,7 +89,7 @@ function PostTemplateInnerBlocks( { classList } ) {
 	return <li { ...innerBlocksProps } />;
 }
 
-function PostTemplateBlockPreview( {
+function TermTemplateBlockPreview( {
 	blocks,
 	blockContextId,
 	classList,
@@ -124,13 +124,13 @@ function PostTemplateBlockPreview( {
 	);
 }
 
-const MemoizedPostTemplateBlockPreview = memo( PostTemplateBlockPreview );
+const MemoizedTermTemplateBlockPreview = memo( TermTemplateBlockPreview );
 
-export default function PostTemplateEdit( {
+export default function TermTemplateEdit( {
 	setAttributes,
 	clientId,
 	context: {
-		'cr0ybot/query': {
+		'term-query/query': {
 			perPage,
 			offset = 0,
 			order,
@@ -148,8 +148,8 @@ export default function PostTemplateEdit( {
 			// REST API or be handled by custom REST filters like `rest_{$this->post_type}_query`.
 			...restQueryArgs
 		} = {},
-		'cr0ybot/taxonomy': taxonomy,
-		'cr0ybot/stickyTerms': stickyTerms,
+		'term-query/taxonomy': taxonomy,
+		'term-query/stickyTerms': stickyTerms,
 		templateSlug,
 		previewPostType,
 	},
@@ -195,6 +195,8 @@ export default function PostTemplateEdit( {
 				//
 			}
 
+			console.log( 'Querying taxonomy:', taxonomy );
+
 			return {
 				terms: [
 					...(fetchedStickyTerms ?? []),
@@ -226,8 +228,8 @@ export default function PostTemplateEdit( {
 	const blockContexts = useMemo(
 		() =>
 			terms?.map( ( term ) => ( {
-				'cr0ybot/taxonomy': term.taxonomy,
-				'cr0ybot/termId': term.id,
+				'term-query/taxonomy': term.taxonomy,
+				'term-query/termId': term.id,
 				classList: term.class_list ?? '',
 			} ) ),
 		[ terms ]
@@ -290,27 +292,27 @@ export default function PostTemplateEdit( {
 				{ blockContexts &&
 					blockContexts.map( ( blockContext ) => (
 						<BlockContextProvider
-							key={ blockContext['cr0ybot/termId'] }
+							key={ blockContext['term-query/termId'] }
 							value={ blockContext }
 						>
-							{ blockContext['cr0ybot/termId'] ===
+							{ blockContext['term-query/termId'] ===
 							( activeBlockContextId ||
-								blockContexts[ 0 ]?.['cr0ybot/termId'] ) ? (
-								<PostTemplateInnerBlocks
+								blockContexts[ 0 ]?.['term-query/termId'] ) ? (
+								<TermTemplateInnerBlocks
 									classList={ blockContext.classList }
 								/>
 							) : null }
-							<MemoizedPostTemplateBlockPreview
+							<MemoizedTermTemplateBlockPreview
 								blocks={ blocks }
-								blockContextId={ blockContext['cr0ybot/termId'] }
+								blockContextId={ blockContext['term-query/termId'] }
 								classList={ blockContext.classList }
 								setActiveBlockContextId={
 									setActiveBlockContextId
 								}
 								isHidden={
-									blockContext['cr0ybot/termId'] ===
+									blockContext['term-query/termId'] ===
 									( activeBlockContextId ||
-										blockContexts[ 0 ]?.['cr0ybot/termId'] )
+										blockContexts[ 0 ]?.['term-query/termId'] )
 								}
 							/>
 						</BlockContextProvider>
