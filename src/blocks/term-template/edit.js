@@ -183,7 +183,7 @@ export default function PostTemplateEdit( {
 			}
 
 			let fetchedStickyTerms = [];
-			if ( stickyTerms.length ) {
+			if ( stickyTerms?.length ) {
 				fetchedStickyTerms = getEntityRecords( 'taxonomy', taxonomy, {
 					include: stickyTerms,
 					orderby: 'include',
