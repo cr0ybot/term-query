@@ -1,0 +1,60 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cr0ybot/term-query",
+	"title": "Taxonomy Terms",
+	"category": "theme",
+	"description": "An advanced block that allows displaying taxonomy terms based on different query parameters and visual configurations.",
+	"textdomain": "cr0ybot",
+	"attributes": {
+		"queryId": {
+			"type": "number"
+		},
+		"query": {
+			"type": "object",
+			"default": {
+				"perPage": 100,
+				"pages": 0,
+				"offset": 0,
+				"order": "asc",
+				"orderBy": "name",
+				"hideEmpty": true,
+				"include": [],
+				"exclude": [],
+				"inherit": false,
+				"parent": 0
+			}
+		},
+		"taxonomy": {
+			"type": "string"
+		},
+		"stickyTerms": {
+			"type": "array",
+			"default": []
+		},
+		"tagName": {
+			"type": "string",
+			"default": "div"
+		},
+		"namespace": {
+			"type": "string"
+		}
+	},
+	"providesContext": {
+		"term-query/queryId": "queryId",
+		"term-query/query": "query",
+		"term-query/taxonomy": "taxonomy",
+		"term-query/stickyTerms": "stickyTerms",
+		"term-query/displayLayout": "displayLayout"
+	},
+	"supports": {
+		"align": [
+			"wide",
+			"full"
+		],
+		"html": false,
+		"layout": true
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style.css"
+}

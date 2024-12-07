@@ -1,0 +1,42 @@
+{
+	"name": "term-query",
+	"version": "0.1.0",
+	"description": "Query and display taxonomy terms.",
+	"author": {
+		"name": "Cory Hughart",
+		"email": "cory@coryhughart.com",
+		"url": "https://coryhughart.com"
+	},
+	"license": "GPL-3.0-or-later",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/cr0ybot/term-query.git"
+	},
+	"bugs": {
+		"url": "https://github.com/cr0ybot/term-query/issues"
+	},
+	"homepage": "https://github.com/cr0ybot/term-query#readme",
+	"main": "build/index.js",
+	"scripts": {
+		"build": "wp-scripts build --webpack-copy-php",
+		"env": "wp-env",
+		"env:start": "wp-env start --xdebug",
+		"env:stop": "wp-env stop",
+		"env:destroy": "wp-env destroy",
+		"format": "wp-scripts format",
+		"lint:css": "wp-scripts lint-style",
+		"lint:js": "wp-scripts lint-js",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start --webpack-copy-php"
+	},
+	"devDependencies": {
+		"@wordpress/env": "^10.13.0",
+		"@wordpress/icons": "^10.13.0",
+		"@wordpress/scripts": "^30.6.0"
+	},
+	"dependencies": {
+		"clsx": "^2.1.1",
+		"lucide-static": "^0.468.0"
+	}
+}

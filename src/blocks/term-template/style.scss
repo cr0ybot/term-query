@@ -1,0 +1,55 @@
+.wp-block-cr0ybot-term-template {
+	list-style: none;
+	margin-bottom: 0;
+	margin-top: 0;
+	max-width: 100%;
+	padding: 0;
+
+	// These rules no longer apply but should be kept for backwards compatibility.
+	&.is-flex-container {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: 1.25em;
+
+		> li {
+			margin: 0;
+			width: 100%;
+		}
+
+		@media (max-width: 600px) {
+			@for $i from 2 through 6 {
+				&.is-flex-container.columns-#{ $i } > li {
+					width: calc((100% / #{ $i }) - 1.25em + (1.25em / #{ $i }));
+				}
+			}
+		}
+	}
+}
+
+@media ( max-width: 600px ) {
+	// Temporary specificity bump until "wp-container" layout specificity is revisited.
+	.wp-block-cr0ybot-term-template-is-layout-grid.wp-block-cr0ybot-term-template-is-layout-grid.wp-block-cr0ybot-term-template-is-layout-grid.wp-block-cr0ybot-term-template-is-layout-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+.wp-block-cr0ybot-term-template-is-layout-constrained > li > .alignright,
+.wp-block-cr0ybot-term-template-is-layout-flow > li > .alignright {
+	float: right;
+	margin-inline-end: 0;
+	margin-inline-start: 2em;
+}
+
+.wp-block-cr0ybot-term-template-is-layout-constrained > li > .alignleft,
+.wp-block-cr0ybot-term-template-is-layout-flow > li > .alignleft {
+	float: left;
+	margin-inline-end: 2em;
+	margin-inline-start: 0;
+}
+
+.wp-block-cr0ybot-term-template-is-layout-constrained > li > .aligncenter,
+.wp-block-cr0ybot-term-template-is-layout-flow > li > .aligncenter {
+	margin-inline-end: auto;
+	margin-inline-start: auto;
+}

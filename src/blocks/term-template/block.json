@@ -1,0 +1,62 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "cr0ybot/term-template",
+	"title": "Taxonomy Term Template",
+	"category": "theme",
+	"parent": [
+		"cr0ybot/term-query"
+	],
+	"description": "Contains the block elements used to render a taxonomy term, like the title, description, and more.",
+	"textdomain": "default",
+	"usesContext": [
+		"term-query/queryId",
+		"term-query/query",
+		"term-query/taxonomy",
+		"term-query/stickyTerms",
+		"term-query/displayLayout",
+		"templateSlug",
+		"previewPostType"
+	],
+	"supports": {
+		"reusable": false,
+		"html": false,
+		"align": [
+			"wide",
+			"full"
+		],
+		"layout": true,
+		"color": {
+			"gradients": true,
+			"link": true,
+			"__experimentalDefaultControls": {
+				"background": true,
+				"text": true
+			}
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true,
+			"__experimentalFontFamily": true,
+			"__experimentalFontWeight": true,
+			"__experimentalFontStyle": true,
+			"__experimentalTextTransform": true,
+			"__experimentalTextDecoration": true,
+			"__experimentalLetterSpacing": true,
+			"__experimentalDefaultControls": {
+				"fontSize": true
+			}
+		},
+		"spacing": {
+			"blockGap": {
+				"__experimentalDefault": "1.25em"
+			},
+			"__experimentalDefaultControls": {
+				"blockGap": true
+			}
+		}
+	},
+	"style": "file:./style.css",
+	"editorScript": "file:./index.js",
+	"render": "file:./render.php"
+}
