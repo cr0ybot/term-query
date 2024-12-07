@@ -66,7 +66,7 @@ const TEMPLATE = [
 	} ],
 	[ 'core/buttons', {}, [
 		[ 'core/button', {
-			text: __( 'View posts', 'cr0ybot' ),
+			text: __( 'View posts', 'term-query' ),
 			metadata: {
 				bindings: {
 					url: {
@@ -260,13 +260,13 @@ export default function PostTemplateEdit( {
 	const displayLayoutControls = [
 		{
 			icon: list,
-			title: _x( 'List view', 'Term template block display setting', 'cr0ybot' ),
+			title: _x( 'List view', 'Term template block display setting', 'term-query' ),
 			onClick: () => setDisplayLayout( { type: 'default' } ),
 			isActive: layoutType === 'default' || layoutType === 'constrained',
 		},
 		{
 			icon: grid,
-			title: _x( 'Grid view', 'Term template block display setting', 'cr0ybot' ),
+			title: _x( 'Grid view', 'Term template block display setting', 'term-query' ),
 			onClick: () =>
 				setDisplayLayout( {
 					type: 'grid',

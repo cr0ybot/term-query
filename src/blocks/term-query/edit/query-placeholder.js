@@ -55,12 +55,12 @@ export default function QueryPlaceholder( {
 					{ ! taxonomies ? (
 						<>
 							<Spinner />
-							<p>{ __( 'Loading taxonomies…', 'cr0ybot' ) }</p>
+							<p>{ __( 'Loading taxonomies…', 'term-query' ) }</p>
 						</>
 					) : (
 						<>
 							<SelectControl
-								label={ __( 'Select taxonomy', 'cr0ybot' ) }
+								label={ __( 'Select taxonomy', 'term-query' ) }
 								value={ selectedTaxonomy }
 								options={ taxonomies?.map( ( { slug, name } ) => ( {
 									value: slug,
@@ -71,7 +71,7 @@ export default function QueryPlaceholder( {
 								} }
 							/>
 							<Button variant="primary" type="submit">
-								{ __( 'Select taxonomy', 'cr0ybot' ) }
+								{ __( 'Select taxonomy', 'term-query' ) }
 							</Button>
 						</>
 					) }

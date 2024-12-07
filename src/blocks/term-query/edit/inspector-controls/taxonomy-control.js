@@ -13,7 +13,7 @@ export default function TaxonomyControl( { onChange, taxonomy } ) {
 		<>
 			<ComboboxControl
 				__nextHasNoMarginBottom
-				label={ __( 'Taxonomy', 'cr0ybot' ) }
+				label={ __( 'Taxonomy', 'term-query' ) }
 				value={ taxonomy }
 				onChange={ onChange }
 				options={ taxonomies.map( ( { slug, name } ) => ( {
