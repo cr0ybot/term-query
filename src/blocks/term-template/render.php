@@ -6,18 +6,25 @@
  * @param string   $content    The block content.
  * @param WP_Block $block      The block object.
  *
- * @package RTG.fish
+ * @package term-query
  */
 
-if ( ! function_exists( 'rtg_build_query_vars_from_term_block' ) ) {
-	function rtg_build_term_query_vars_from_term_block( $block, $page ) {
+if ( ! function_exists( 'ctq_build_query_vars_from_term_query_block' ) ) {
+
+	/**
+	 * Build query vars from term query block.
+	 *
+	 * @param WP_Block $block The block object.
+	 * @param int      $page The current page.
+	 */
+	function ctq_build_query_vars_from_term_query_block( $block, $page ) {
 		$query_args = array(
 			'offset' => 0,
 		);
 
-		if ( isset( $block->context['cr0ybot/query'] ) ) {
-			$context_query = $block->context['cr0ybot/query'];
-			$taxonomy      = $block->context['cr0ybot/taxonomy'];
+		if ( isset( $block->context['term-query/query'] ) ) {
+			$context_query = $block->context['term-query/query'];
+			$taxonomy      = $block->context['term-query/taxonomy'];
 
 			$query_args['taxonomy']   = $taxonomy;
 			$query_args['offset']     = ( $page - 1 ) * $context_query['perPage'];
@@ -34,11 +41,12 @@ if ( ! function_exists( 'rtg_build_query_vars_from_term_block' ) ) {
 	}
 }
 
-$page_key = isset( $block->context['cr0ybot/queryId'] ) ? 'query-' . $block->context['cr0ybot/queryId'] . '-page' : 'query-page';
-$page     = empty( $_GET[ $page_key ] ) ? 1 : (int) $_GET[ $page_key ];
+$page_key = isset( $block->context['term-query/queryId'] ) ? 'query-' . $block->context['term-query/queryId'] . '-page' : 'query-page';
+// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited, WordPress.Security.NonceVerification.Recommended
+$page = empty( $_GET[ $page_key ] ) ? 1 : (int) $_GET[ $page_key ];
 
 // Use global query if needed.
-$use_global_query = ( isset( $block->context['cr0ybot/query']['inherit'] ) && $block->context['cr0ybot/query']['inherit'] );
+$use_global_query = ( isset( $block->context['term-query/query']['inherit'] ) && $block->context['term-query/query']['inherit'] );
 if ( $use_global_query ) {
 	global $wp_query;
 
@@ -47,17 +55,19 @@ if ( $use_global_query ) {
 	 * get the terms from the post.
 	 */
 	if ( is_single() || in_the_loop() ) {
-		$terms = get_the_terms( get_the_ID(), $block->context['cr0ybot/taxonomy'] );
+		$terms = get_the_terms( get_the_ID(), $block->context['term-query/taxonomy'] );
 	}
+
 	/*
 	 * Otherwise, get the postID from context.
 	 */
 	else {
+		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$post_id = $block->context['postId'];
-		$terms   = get_the_terms( $post_id, $block->context['cr0ybot/taxonomy'] );
+		$terms   = get_the_terms( $post_id, $block->context['term-query/taxonomy'] );
 	}
 } else {
-	$query_args = rtg_build_term_query_vars_from_term_block( $block, $page );
+	$query_args = ctq_build_query_vars_from_term_query_block( $block, $page );
 	$query      = new WP_Term_Query( $query_args );
 	$terms      = $query->get_terms();
 }
@@ -67,9 +77,9 @@ if ( empty( $terms ) ) {
 }
 
 $classnames = '';
-if ( isset( $block->context['cr0ybot/displayLayout'] ) && isset( $block->context['cr0ybot/query'] ) ) {
-	if ( isset( $block->context['cr0ybot/displayLayout']['type'] ) && 'flex' === $block->context['cr0ybot/displayLayout']['type'] ) {
-		$classnames = "is-flex-container columns-{$block->context['cr0ybot/displayLayout']['columns']}";
+if ( isset( $block->context['term-query/displayLayout'] ) && isset( $block->context['term-query/query'] ) ) {
+	if ( isset( $block->context['term-query/displayLayout']['type'] ) && 'flex' === $block->context['cr0ybot/displayLayout']['type'] ) {
+		$classnames = "is-flex-container columns-{$block->context['term-query/displayLayout']['columns']}";
 	}
 }
 if ( isset( $attributes['style']['elements']['link']['color']['text'] ) ) {
@@ -84,6 +94,7 @@ if ( isset( $attributes['layout']['type'] ) && 'grid' === $attributes['layout'][
 $wrapper_attributes = get_block_wrapper_attributes( array( 'class' => trim( $classnames ) ) );
 
 $content = '';
+// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 foreach ( $terms as $term ) {
 
 	// Get an instance of the current Post Template block.
@@ -94,10 +105,10 @@ foreach ( $terms as $term ) {
 	$block_instance['blockName'] = 'core/null';
 
 	$term_id              = $term->term_id;
-	$taxonomy             = $term->taxonomy;
+	$taxonomy             = $term->taxonomy; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 	$filter_block_context = static function ( $context ) use ( $term_id, $taxonomy ) {
-		$context['cr0ybot/taxonomy'] = $taxonomy;
-		$context['cr0ybot/termId']   = $term_id;
+		$context['term-query/taxonomy'] = $taxonomy;
+		$context['term-query/termId']   = $term_id;
 		return $context;
 	};
 
