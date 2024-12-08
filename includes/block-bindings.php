@@ -40,7 +40,10 @@ function register() {
  * @param string   $attribute_name The attribute name.
  */
 function get_term_value( array $source_args, WP_Block $block_instance, string $attribute_name ) {
-	if ( empty( $source_args['key'] ) ) {
+	if (
+		empty( $source_args['key'] )
+		|| ! isset( $block_instance->context['term-query/termId'] )
+	) {
 		return null;
 	}
 
