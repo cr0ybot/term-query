@@ -44,12 +44,12 @@ function get_term_value( array $source_args, WP_Block $block_instance, string $a
 		return null;
 	}
 
-	if ( empty( $block_instance->context['term-query/termId'] ) ) {
+	$term_id = $block_instance->context['term-query/termId'];
+	if ( empty( $term_id ) ) {
 		return null;
 	}
-	$term_id = $block_instance->context['term-query/termId'];
 
-	if ( $source_args['key'] === 'id' ) {
+	if ( 'id' === $source_args['key'] ) {
 		return $term_id;
 	}
 
@@ -58,7 +58,7 @@ function get_term_value( array $source_args, WP_Block $block_instance, string $a
 		return null;
 	}
 
-	if ( $source_args['key'] === 'meta' ) {
+	if ( 'meta' === $source_args['key'] ) {
 		if ( empty( $source_args['metaKey'] ) ) {
 			return null;
 		}
