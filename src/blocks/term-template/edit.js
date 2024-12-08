@@ -164,7 +164,8 @@ export default function TermTemplateEdit( {
 			const { getBlocks } = select( blockEditorStore );
 
 			const query = {
-				offset: offset || 0,
+				//offset: offset || 0,
+				page,
 				order,
 				orderby: orderBy,
 			};
