@@ -50,18 +50,16 @@ $use_global_query = ( isset( $block->context['term-query/query']['inherit'] ) &&
 if ( $use_global_query ) {
 	global $wp_query;
 
-	/*
-	 * If the global query is for a single post or we're in the main loop,
-	 * get the terms from the post.
-	 */
 	if ( is_single() || in_the_loop() ) {
+		/*
+		 * If the global query is for a single post or we're in the main loop,
+		 * get the terms from the post.
+		 */
 		$terms = get_the_terms( get_the_ID(), $block->context['term-query/taxonomy'] );
-	}
-
-	/*
-	 * Otherwise, get the postID from context.
-	 */
-	else {
+	} else {
+		/*
+		 * Otherwise, get the postID from context.
+		 */
 		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		$post_id = $block->context['postId'];
 		$terms   = get_the_terms( $post_id, $block->context['term-query/taxonomy'] );
