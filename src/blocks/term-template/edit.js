@@ -169,7 +169,6 @@ export default function TermTemplateEdit( {
 
 			const query = {
 				//offset: offset || 0,
-				page,
 				order,
 				orderby: orderBy,
 			};
