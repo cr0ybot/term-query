@@ -21,6 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+define( 'TERM_QUERY_PLUGIN_PATH', trailingslashit( plugin_dir_path( __FILE__ ) ) );
+define( 'TERM_QUERY_PLUGIN_URI', trailingslashit( plugin_dir_url( __FILE__ ) ) );
+define( 'TERM_QUERY_DIST_PATH', TERM_QUERY_PLUGIN_PATH . 'build/' );
+define( 'TERM_QUERY_DIST_URI', TERM_QUERY_PLUGIN_URI . 'build/' );
+define( 'TERM_QUERY_BLOCKS_PATH', TERM_QUERY_DIST_PATH . 'blocks/' );
+
 // Glob import all includes.
 foreach ( glob( plugin_dir_path( __FILE__ ) . 'includes/*.php' ) as $file ) {
 	require_once $file;
