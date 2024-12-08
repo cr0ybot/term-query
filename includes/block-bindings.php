@@ -30,6 +30,16 @@ function register() {
 			'uses_context'       => array( 'term-query/termId' ),
 		)
 	);
+
+	// Term meta binding for children of term block.
+	register_block_bindings_source(
+		'term-query/term-meta',
+		array(
+			'label'              => __( 'Term Meta', 'term-query' ),
+			'get_value_callback' => __NAMESPACE__ . '\\get_term_meta_value',
+			'uses_context'       => array( 'term-query/termId' ),
+		)
+	);
 }
 
 /**
@@ -61,34 +71,51 @@ function get_term_value( array $source_args, WP_Block $block_instance, string $a
 		return null;
 	}
 
-	if ( 'meta' === $source_args['key'] ) {
-		if ( empty( $source_args['metaKey'] ) ) {
-			return null;
-		}
-
-		$meta_value = get_term_meta( $term_id, $source_args['metaKey'], true );
-
-		if ( ! empty( $source_args['transform'] ) ) {
-			switch ( $source_args['transform'] ) {
-				case 'attachmentURL':
-					$meta_value = wp_get_attachment_image_src( $meta_value, 'large' );
-					break;
-				case 'attachmentImageAlt':
-					$meta_value = get_post_meta( $meta_value, '_wp_attachment_image_alt', true );
-					break;
-			}
-		}
-
-		return $meta_value;
+	// Attempt to get the value directly from the term object.
+	$value = $term->{ $source_args['key'] };
+	if ( ! empty( $value ) ) {
+		return $value;
 	}
 
+	// Additional keys that require special handling.
 	return match ( $source_args['key'] ) {
-		'name' => $term->name,
-		'slug' => $term->slug,
-		'description' => $term->description,
-		'taxonomy' => $term->taxonomy,
 		'url' => get_term_link( $term ),
-		'count' => $term->count,
 		default => $term_id,
 	};
+}
+
+/**
+ * Get the value for a term meta binding.
+ *
+ * @param array    $source_args The source args.
+ * @param WP_Block $block_instance The block instance.
+ * @param string   $attribute_name The attribute name.
+ */
+function get_term_meta_value( array $source_args, WP_Block $block_instance, string $attribute_name ) {
+	if (
+		empty( $source_args['key'] )
+		|| ! isset( $block_instance->context['term-query/termId'] )
+	) {
+		return null;
+	}
+
+	$term_id = $block_instance->context['term-query/termId'];
+	if ( empty( $term_id ) ) {
+		return null;
+	}
+
+	$meta_value = get_term_meta( $term_id, $source_args['key'], true );
+
+	if ( ! empty( $source_args['transform'] ) ) {
+		switch ( $source_args['transform'] ) {
+			case 'attachmentURL':
+				$meta_value = wp_get_attachment_image_src( $meta_value, 'large' );
+				break;
+			case 'attachmentImageAlt':
+				$meta_value = get_post_meta( $meta_value, '_wp_attachment_image_alt', true );
+				break;
+		}
+	}
+
+	return $meta_value;
 }

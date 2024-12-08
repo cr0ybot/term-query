@@ -26,18 +26,16 @@ const TEMPLATE = [
 		metadata: {
 			bindings: {
 				url: {
-					source: 'term-query/term',
+					source: 'term-query/term-meta',
 					args: {
-						'key': 'meta',
-						'metaKey': 'thumbnail_id',
+						'key': 'thumbnail_id',
 						'transform': 'attachmentURL',
 					},
 				},
 				alt: {
-					source: 'term-query/term',
+					source: 'term-query/term-meta',
 					args: {
-						'key': 'meta',
-						'metaKey': 'thumbnail_id',
+						'key': 'thumbnail_id',
 						'transform': 'attachmentImageAlt',
 					},
 				},
@@ -196,10 +194,8 @@ export default function TermTemplateEdit( {
 
 			// If `inherit` is truthy, adjust conditionally the query to create a better preview.
 			if ( inherit ) {
-				//
+				// @todo
 			}
-
-			console.log( 'Querying taxonomy:', taxonomy );
 
 			return {
 				terms: [
