@@ -3,11 +3,25 @@
  */
 
 const { basename, dirname, parse } = require( 'path' );
+const glob = require( 'fast-glob' );
 
 const defaultConfig = require( '@wordpress/scripts/config/webpack.config' );
 
 module.exports = {
 	...defaultConfig,
+	entry() {
+		// Get the default entries.
+		const entries = (typeof defaultConfig.entry === 'function') ? defaultConfig.entry() : defaultConfig.entry;
+
+		// Add entries dynamically for any scripts in the root of the src folder.
+		const scripts = glob.sync( './src/*.js' );
+		scripts.forEach( ( script ) => {
+			const name = basename( script, '.js' );
+			entries[ name ] = script;
+		} );
+
+		return entries;
+	},
 	optimization: {
 		...( defaultConfig?.optimization || {} ),
 		splitChunks: {
