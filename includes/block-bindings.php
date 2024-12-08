@@ -66,7 +66,20 @@ function get_term_value( array $source_args, WP_Block $block_instance, string $a
 			return null;
 		}
 
-		return get_term_meta( $term_id, $source_args['metaKey'], true );
+		$meta_value = get_term_meta( $term_id, $source_args['metaKey'], true );
+
+		if ( ! empty( $source_args['transform'] ) ) {
+			switch ( $source_args['transform'] ) {
+				case 'attachmentURL':
+					$meta_value = wp_get_attachment_image_src( $meta_value, 'large' );
+					break;
+				case 'attachmentImageAlt':
+					$meta_value = get_post_meta( $meta_value, '_wp_attachment_image_alt', true );
+					break;
+			}
+		}
+
+		return $meta_value;
 	}
 
 	return match ( $source_args['key'] ) {
@@ -76,9 +89,6 @@ function get_term_value( array $source_args, WP_Block $block_instance, string $a
 		'taxonomy' => $term->taxonomy,
 		'url' => get_term_link( $term ),
 		'count' => $term->count,
-		// @todo Need a more robust method for fetching attachment image/alt text from an ID in term meta.
-		'image' => wp_get_attachment_image_src( get_term_meta( $term_id, 'thumbnail_id', true ), 'large' ),
-		'imageAlt' => get_post_meta( get_term_meta( $term_id, 'thumbnail_id', true ), '_wp_attachment_image_alt', true ),
 		default => $term_id,
 	};
 }
