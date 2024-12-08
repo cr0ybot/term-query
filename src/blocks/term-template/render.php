@@ -50,14 +50,24 @@ $use_global_query = ( isset( $block->context['term-query/query']['inherit'] ) &&
 if ( $use_global_query ) {
 	global $wp_query;
 
-	if ( is_single() || in_the_loop() ) {
-		/*
+	if ( is_tax() ) {
+		/**
+		 * If the global query is for a term archive, get the child terms.
+		 *
+		 * Note: This is a little awkward since the taxonomy must be selected in
+		 * the block settings currently.
+		 *
+		 * @todo Inherit taxonomy?
+		 */
+		$terms = get_term_children( $wp_query->get_queried_object_id(), $block->context['term-query/taxonomy'] );
+	} elseif ( is_single() || in_the_loop() ) {
+		/**
 		 * If the global query is for a single post or we're in the main loop,
 		 * get the terms from the post.
 		 */
 		$terms = get_the_terms( get_the_ID(), $block->context['term-query/taxonomy'] );
 	} else {
-		/*
+		/**
 		 * Otherwise, get the postID from context.
 		 */
 		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited

@@ -21,6 +21,8 @@ import { Spinner, ToolbarGroup } from '@wordpress/components';
 import { store as coreStore } from '@wordpress/core-data';
 import { list, grid } from '@wordpress/icons';
 
+import { getQueryContextFromTemplate } from './utils';
+
 const TEMPLATE = [
 	[ 'core/image', {
 		metadata: {
@@ -154,6 +156,7 @@ export default function TermTemplateEdit( {
 		'term-query/stickyTerms': stickyTerms,
 		templateSlug,
 		previewPostType,
+		postId,
 	},
 	attributes: { layout },
 	__unstableLayoutClassNames,
@@ -192,9 +195,28 @@ export default function TermTemplateEdit( {
 				} );
 			}
 
-			// If `inherit` is truthy, adjust conditionally the query to create a better preview.
+			// If `inherit` is truthy, adjust the query conditionally to create a better preview.
 			if ( inherit ) {
-				// @todo
+				const { isSingular, templateType } = getQueryContextFromTemplate( templateSlug );
+
+				if ( isSingular ) {
+					// If we're on a post, get only the terms for the current post.
+					query.post = postId;
+				} else {
+					// If we're on a term archive, fetch the term ID to use as the parent.
+					const templateTaxonomy =
+						templateType === taxonomy &&
+						getEntityRecords( 'taxonomy', taxonomy, {
+							context: 'view',
+							per_page: 1,
+							_fields: [ 'id' ],
+							slug: templateSlug.replace( `${taxonomy}-`, '' ),
+						} );
+
+					if ( templateTaxonomy ) {
+						query.parent = templateTaxonomy[ 0 ]?.id;
+					}
+				}
 			}
 
 			return {

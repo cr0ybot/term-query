@@ -16,7 +16,8 @@
 		"term-query/stickyTerms",
 		"term-query/displayLayout",
 		"templateSlug",
-		"previewPostType"
+		"previewPostType",
+		"postId"
 	],
 	"supports": {
 		"reusable": false,
