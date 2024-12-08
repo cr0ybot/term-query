@@ -50,7 +50,9 @@ $use_global_query = ( isset( $block->context['term-query/query']['inherit'] ) &&
 if ( $use_global_query ) {
 	global $wp_query;
 
-	if ( is_tax() ) {
+	$context_query = $block->context['term-query/query'];
+
+	if ( ! in_the_loop() && ( is_category() || is_tag() || is_tax() ) ) {
 		/**
 		 * If the global query is for a term archive, get the child terms.
 		 *
@@ -59,7 +61,13 @@ if ( $use_global_query ) {
 		 *
 		 * @todo Inherit taxonomy?
 		 */
-		$terms = get_term_children( $wp_query->get_queried_object_id(), $block->context['term-query/taxonomy'] );
+		$terms = get_terms(
+			array(
+				'taxonomy'   => $block->context['term-query/taxonomy'],
+				'parent'     => $wp_query->get_queried_object_id(),
+				'hide_empty' => $context_query['hideEmpty'],
+			)
+		);
 	} elseif ( is_single() || in_the_loop() ) {
 		/**
 		 * If the global query is for a single post or we're in the main loop,
