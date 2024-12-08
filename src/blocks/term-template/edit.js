@@ -74,7 +74,7 @@ const TEMPLATE = [
 					url: {
 						source: 'term-query/term',
 						args: {
-							'key': 'url',
+							'key': 'link',
 						},
 					},
 				},
