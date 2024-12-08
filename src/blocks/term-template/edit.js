@@ -28,13 +28,17 @@ const TEMPLATE = [
 				url: {
 					source: 'term-query/term',
 					args: {
-						'key': 'image',
+						'key': 'meta',
+						'metaKey': 'thumbnail_id',
+						'transform': 'attachmentURL',
 					},
 				},
 				alt: {
 					source: 'term-query/term',
 					args: {
-						'key': 'imageAlt',
+						'key': 'meta',
+						'metaKey': 'thumbnail_id',
+						'transform': 'attachmentImageAlt',
 					},
 				},
 			},
