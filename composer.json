@@ -1,6 +1,6 @@
 {
 	"name": "cr0ybot/term-query",
-	"description": "Query and display taxonomy terms.",
+	"description": "Query and display taxonomy terms as blocks.",
 	"type": "project",
 	"license": "GPL-3.0-or-later",
 	"autoload": {

@@ -6,50 +6,99 @@ Stable tag:        0.1.0
 License:           GPL-3.0-or-later
 License URI:       (https://www.gnu.org/licenses/gpl-3.0.html)
 
-Query and display taxonomy terms.
+Query and display taxonomy terms as blocks.
 
 == Description ==
 
-This is the long description. No limit, and you can use Markdown (as well as in the following sections).
+The provided `Taxonomy Terms` block allows you to query and display taxonomy terms--not posts--in a list or grid. It works similarly to the core `Query Loop` block, allowing you to customize the blocks and layout used to display the terms.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+== Block Variations ==
+
+The following block variations are made available by this plugin to display term data:
+
+- **Term Title**: Heading block that displays the term title.
+- **Term Description**: Paragraph block that displays the term description.
+- **Term Count**: Paragraph block that displays the term count.
+- **Term Link**: Button block that links to the term archive.
 
 == Installation ==
-
-This section describes how to install the plugin and get it working.
-
-e.g.
 
 1. Upload the plugin files to the `/wp-content/plugins/term-query` directory, or install the plugin through the WordPress plugins screen directly.
 1. Activate the plugin through the 'Plugins' screen in WordPress
 
-
 == Frequently Asked Questions ==
 
-= A question that someone might have =
+= How do I display a different term value other than the ones provided by the block variations? =
 
-An answer to that question.
+Currently, WordPress only allows setting block bindings via code, so you'll need to add a custom block variation for the paragraph, heading, image, or button block.
 
-= What about foo bar? =
+To display term values, use the `term-query/term` block binding with the key of the value you want to display as an argument. For example, to display the term slug in a paragraph block, you can use the following JavaScript code:
 
-Answer to foo bar dilemma.
+```js
+registerBlockVariation( 'core/paragraph', {
+	name: 'my-plugin-name/term-slug',
+	title: __( 'Term Slug', 'my-plugin-name' ),
+	description: __( 'Displays the slug of the current term within a Taxonomy Term block.', 'my-plugin-name' ),
+	isDefault: false,
+	scope: [ 'block', 'inserter', 'transform' ],
+	attributes: {
+		metadata: {
+			bindings: {
+				content: {
+					source: 'term-query/term',
+					args: {
+						'key': 'slug',
+					},
+				},
+			},
+		},
+	},
+	isActive: ['metadata'],
+} );
+```
+
+= How do I display custom term meta values? =
+
+Just like displaying term values, you can use the `term-query/term-meta` block binding with the key of the meta value you want to display as an argument. This binding comes with an additional `transform` argument that allows you to transform an ID value meant to indicate an attachment into a URL or image alt text. For instance, to display an image stored as an ID in the term meta field `thumbnail_id`, you can use the following JavaScript code:
+
+```js
+registerBlockVariation( 'core/image', {
+	name: 'my-plugin-name/term-thumbnail',
+	title: __( 'Term Thumbnail', 'my-plugin-name' ),
+	description: __( 'Displays the thumbnail of the current term within a Taxonomy Term block.', 'my-plugin-name' ),
+	isDefault: false,
+	scope: [ 'block', 'inserter', 'transform' ],
+	attributes: {
+		metadata: {
+			bindings: {
+				url: {
+					source: 'term-query/term-meta',
+					args: {
+						'key': 'thumbnail_id',
+						'transform': 'attachmentURL',
+					},
+				},
+				alt: {
+					source: 'term-query/term-meta',
+					args: {
+						'key': 'thumbnail_id',
+						'transform': 'attachmentImageAlt',
+					},
+				},
+			},
+		},
+	},
+	isActive: ['metadata'],
+} );
+```
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif). Note that the screenshot is taken from
-the /assets directory or the directory that contains the stable readme.txt (tags or trunk). Screenshots in the /assets
-directory take precedence. For example, `/assets/screenshot-1.png` would win over `/tags/4.3/screenshot-1.png`
-(or jpg, jpeg, gif).
-2. This is the second screen shot
+1. Query terms of any taxonomy to display.
+2. Display term data in a list or grid.
+3. Inherit the "query" to display terms for the current post or child terms on a term archive.
 
 == Changelog ==
 
 = 0.1.0 =
-* Release
-
-== Arbitrary section ==
-
-You may provide arbitrary sections, in the same format as the ones above. This may be of use for extremely complicated
-plugins where more information needs to be conveyed that doesn't fit into the categories of "description" or
-"installation." Arbitrary sections will be shown below the built-in sections outlined above.
+* Pre-release

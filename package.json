@@ -1,7 +1,7 @@
 {
 	"name": "term-query",
 	"version": "0.1.0",
-	"description": "Query and display taxonomy terms.",
+	"description": "Query and display taxonomy terms as blocks.",
 	"author": {
 		"name": "Cory Hughart",
 		"email": "cory@coryhughart.com",
