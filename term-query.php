@@ -1,10 +1,10 @@
 <?php
 /**
- * Plugin Name:       Term Query
+ * Plugin Name:       Term Query Block
  * Plugin URI:        https://github.com/cr0ybot/term-query
- * Description:       Query and display taxonomy terms.
- * Requires at least: 6.6
- * Requires PHP:      7.2
+ * Description:       Query and display taxonomy terms as blocks.
+ * Requires at least: 6.7
+ * Requires PHP:      7.4
  * Version:           0.1.0
  * Author:            Cory Hughart
  * Author URI:        https://coryhughart.com
