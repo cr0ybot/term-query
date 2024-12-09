@@ -1,4 +1,5 @@
 import {
+	Flex,
 	PanelBody,
 	RangeControl,
 	ToggleControl,
@@ -74,63 +75,69 @@ export default function QueryInspectorControls( props ) {
 								}
 							/>
 						) }
-						{ showTaxControl && (
-							<TaxonomyControl
-								onChange={ updateTaxonomy }
-								taxonomy={ taxonomy }
-							/>
-						) }
-						{ showStickyTermsControl && (
-							<StickyTermsControl
-								taxonomy={ taxonomy }
-								stickyTerms={ stickyTerms }
-								onChange={ ( value ) => {
-									setAttributes( { stickyTerms: value } );
-								} }
-							/>
-						) }
-						{ showHideEmptyControl && (
-							<ToggleControl
-								__nextHasNoMarginBottom
-								label={ __( 'Hide empty terms' ) }
-								checked={ !! hideEmpty }
-								onChange={ ( value ) =>
-									setQuery( { hideEmpty: !! value } )
-								}
-							/>
-						) }
-						{ showColumnsControl && (
-							<>
-								<RangeControl
-									__nextHasNoMarginBottom
-									label={ __( 'Columns' ) }
-									value={ displayLayout.columns }
-									onChange={ ( value ) =>
-										setDisplayLayout( {
-											columns: value,
-										} )
-									}
-									min={ 2 }
-									max={ Math.max( 6, displayLayout.columns ) }
+						<Flex
+							align="stretch"
+							direction="column"
+							gap={ 4 }
+						>
+							{ showTaxControl && (
+								<TaxonomyControl
+									onChange={ updateTaxonomy }
+									taxonomy={ taxonomy }
 								/>
-								{ displayLayout.columns > 6 && (
-									<Notice
-										status="warning"
-										isDismissible={ false }
-									>
-										{ __(
-											'This column count exceeds the recommended amount and may cause visual breakage.'
-										) }
-									</Notice>
-								) }
-							</>
-						) }
-						{ showOrderControl && (
-							<OrderControl
-								{ ...{ order, orderBy } }
-								onChange={ setQuery }
-							/>
-						) }
+							) }
+							{ showStickyTermsControl && (
+								<StickyTermsControl
+									taxonomy={ taxonomy }
+									stickyTerms={ stickyTerms }
+									onChange={ ( value ) => {
+										setAttributes( { stickyTerms: value } );
+									} }
+								/>
+							) }
+							{ showHideEmptyControl && (
+								<ToggleControl
+									__nextHasNoMarginBottom
+									label={ __( 'Hide empty terms' ) }
+									checked={ !! hideEmpty }
+									onChange={ ( value ) =>
+										setQuery( { hideEmpty: !! value } )
+									}
+								/>
+							) }
+							{ showColumnsControl && (
+								<>
+									<RangeControl
+										__nextHasNoMarginBottom
+										label={ __( 'Columns' ) }
+										value={ displayLayout.columns }
+										onChange={ ( value ) =>
+											setDisplayLayout( {
+												columns: value,
+											} )
+										}
+										min={ 2 }
+										max={ Math.max( 6, displayLayout.columns ) }
+									/>
+									{ displayLayout.columns > 6 && (
+										<Notice
+											status="warning"
+											isDismissible={ false }
+										>
+											{ __(
+												'This column count exceeds the recommended amount and may cause visual breakage.'
+											) }
+										</Notice>
+									) }
+								</>
+							) }
+							{ showOrderControl && (
+								<OrderControl
+									{ ...{ order, orderBy } }
+									onChange={ setQuery }
+								/>
+							) }
+						</Flex>
 					</PanelBody>
 				</InspectorControls>
 			) }

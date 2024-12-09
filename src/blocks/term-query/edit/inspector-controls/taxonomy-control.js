@@ -13,6 +13,7 @@ export default function TaxonomyControl( { onChange, taxonomy } ) {
 		<>
 			<ComboboxControl
 				__nextHasNoMarginBottom
+				__next40pxDefaultSize
 				label={ __( 'Taxonomy', 'term-query' ) }
 				value={ taxonomy }
 				onChange={ onChange }

@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
 export const PagesControl = ( { pages, onChange } ) => {
 	return (
 		<NumberControl
+			__nextHasNoMarginBottom
 			__next40pxDefaultSize
 			label={ __( 'Max pages to show' ) }
 			value={ pages }

@@ -108,6 +108,8 @@ export default function StickyTermsControl( { taxonomy, stickyTerms, onChange } 
 	return (
 		<div className="block-library-query-inspector__taxonomy-control">
 			<FormTokenField
+				__nextHasNoMarginBottom
+				__next40pxDefaultSize
 				label={ taxonomy.name }
 				value={ value }
 				onInputChange={ debouncedSearch }
