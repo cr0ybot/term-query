@@ -8,10 +8,10 @@
  */
 
 import { registerBlockType } from '@wordpress/blocks';
-import { loop as icon } from '@wordpress/icons';
 
 import './style.scss';
 
+import icon from './icon';
 import edit from './edit';
 import save from './save';
 import block from './block.json';
