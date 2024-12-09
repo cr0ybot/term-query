@@ -5,7 +5,7 @@
  * Description:       Query and display taxonomy terms as blocks.
  * Requires at least: 6.7
  * Requires PHP:      7.4
- * Version:           0.0.0
+ * Version:           0.1.0
  * Author:            Cory Hughart
  * Author URI:        https://coryhughart.com
  * License:           GPL-3.0-or-later
