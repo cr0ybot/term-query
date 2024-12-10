@@ -92,6 +92,14 @@ registerBlockVariation( 'core/image', {
 } );
 ```
 
+= What does the ‡ symbol mean? =
+
+The "double dagger" (‡) is a typographical mark generally used to indicate a footnote after both an asterisk (*) and a regular dagger (†) have been used.
+
+WordPress does not currently have any iconography that represents the general concept of taxonomies or terms (just tags and categories), but the asterisk is represented in an icon for "custom post type". As Taxonomies and Terms follow closely behind Post Types as the core functionality of WordPress, I thought that the next footnote mark, the single dagger, would be a good representation of the concept of a "Taxonomy"—it is also a simple symbol, it resembles the letter "t", and reminds me of the pushpin Dashicon. The double dagger then works perfectly for the concept of a "Taxonomy Term" as a double-"t" symbol.
+
+* Post Type, † Taxonomy, ‡ Term.
+
 == Screenshots ==
 
 1. Query terms of any taxonomy to display.
