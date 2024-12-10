@@ -57,7 +57,7 @@ registerBlockVariation( 'core/paragraph', {
 } );
 ```
 
-= How do I display custom term meta values? =
+= How do I display custom term meta values such as images? =
 
 Just like displaying term values, you can use the `term-query/term-meta` block binding with the key of the meta value you want to display as an argument. This binding comes with an additional `transform` argument that allows you to transform an ID value meant to indicate an attachment into a URL or image alt text. For instance, to display an image stored as an ID in the term meta field `thumbnail_id`, you can use the following JavaScript code:
 
