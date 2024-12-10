@@ -6,7 +6,7 @@ An advanced block that allows displaying taxonomy terms based on different query
 
 This is an attempt to fill a gap in WordPress core, see https://github.com/WordPress/gutenberg/issues/49094
 
-Please note that this is still a work-in-progress. The plugin is not yet ready for production use.
+Please note that this is still a work-in-progress. The plugin is not yet ready for production use. If you'd like to test it, [download the latest prerelease here](https://github.com/cr0ybot/term-query/releases/latest).
 
 ## Blocks
 
