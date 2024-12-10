@@ -2,7 +2,7 @@
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 3,
 	"name": "cr0ybot/term-query",
-	"title": "Taxonomy Terms",
+	"title": "Term Query Loop",
 	"category": "theme",
 	"description": "An advanced block that allows displaying taxonomy terms based on different query parameters and visual configurations.",
 	"textdomain": "cr0ybot",
