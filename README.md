@@ -1,8 +1,8 @@
-# Term Query Block Plugin
+![Term Query Loop Block banner](./assets/banner-1544x500.png)
+
+# Term Query Loop Block Plugin
 
 An advanced block that allows displaying taxonomy terms based on different query parameters and visual configurations, similar to the Query Loop block.
-
-![Screenshot of the Term Query block](./assets/screenshot-1.png)
 
 This is an attempt to fill a gap in WordPress core, see https://github.com/WordPress/gutenberg/issues/49094
 
