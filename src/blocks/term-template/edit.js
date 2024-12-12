@@ -31,14 +31,14 @@ const TEMPLATE = [
 					source: 'term-query/term-meta',
 					args: {
 						'key': 'thumbnail_id',
-						'transform': 'attachmentURL',
+						'transform': 'attachment_id_to_url',
 					},
 				},
 				alt: {
 					source: 'term-query/term-meta',
 					args: {
 						'key': 'thumbnail_id',
-						'transform': 'attachmentImageAlt',
+						'transform': 'attachment_id_to_image_alt',
 					},
 				},
 			},

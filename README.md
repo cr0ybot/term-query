@@ -42,11 +42,11 @@ Inside the Term Template block, you can add [certain blocks](#block-variations) 
 | Argument | Possible Values | Description |
 | --- | --- | --- |
 | `key` | Any meta key | The key of the term meta to display. |
-| `transform` | `attachmentURL`, `attachmentImageAlt` | A transformation to apply to the meta value. Transformations are detailed below. |
+| `transform` | `attachment_id_to_url`, `attachment_id_to_image_alt` | A transformation to apply to the meta value. Transformations are detailed below. |
 
 ### Transformations
 
 Term meta values often contain just an ID that needs to be transformed into a useable value. The following transformations are available:
 
-- **attachmentURL**: Transforms an attachment ID into the URL of the attachment.
-- **attachmentImageAlt**: Transforms an attachment ID into the alt text of the attachment.
+- **attachment_id_to_url**: Transforms an attachment ID into the URL of the attachment.
+- **attachment_id_to_image_alt**: Transforms an attachment ID into the alt text of the attachment.
