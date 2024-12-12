@@ -106,15 +106,24 @@ function get_term_meta_value( array $source_args, WP_Block $block_instance, stri
 
 	$meta_value = get_term_meta( $term_id, $source_args['key'], true );
 
+	/**
+	 * Filter all term meta values.
+	 *
+	 * @param mixed $meta_value The term meta value.
+	 * @param array $source_args The source args.
+	 * @return mixed The filtered term meta value. Return null to prevent the block from rendering.
+	 */
+	$meta_value = apply_filters( 'term_query_term_meta', $meta_value, $source_args );
+
 	if ( ! empty( $source_args['transform'] ) ) {
-		switch ( $source_args['transform'] ) {
-			case 'attachmentURL':
-				$meta_value = wp_get_attachment_image_src( $meta_value, 'large' );
-				break;
-			case 'attachmentImageAlt':
-				$meta_value = get_post_meta( $meta_value, '_wp_attachment_image_alt', true );
-				break;
-		}
+		/**
+		 * Filter term meta transform values by key.
+		 *
+		 * @param mixed $meta_value The term meta value.
+		 * @param array $source_args The source args.
+		 * @return mixed The transformed term meta value. Return null to prevent the block from rendering.
+		 */
+		$meta_value = apply_filters( "term_query_term_meta_transform_{$source_args['transform']}", $meta_value, $source_args );
 	}
 
 	return $meta_value;
