@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Term Query Block
+ * Plugin Name:       Term Query Loop Block
  * Plugin URI:        https://github.com/cr0ybot/term-query
  * Description:       Query and display taxonomy terms as blocks.
  * Requires at least: 6.7
