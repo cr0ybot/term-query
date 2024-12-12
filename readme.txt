@@ -75,20 +75,60 @@ registerBlockVariation( 'core/image', {
 					source: 'term-query/term-meta',
 					args: {
 						'key': 'thumbnail_id',
-						'transform': 'attachmentURL',
+						'transform': 'attachment_id_to_url',
 					},
 				},
 				alt: {
 					source: 'term-query/term-meta',
 					args: {
 						'key': 'thumbnail_id',
-						'transform': 'attachmentImageAlt',
+						'transform': 'attachment_id_to_image_alt',
 					},
 				},
 			},
 		},
 	},
 	isActive: ['metadata'],
+} );
+```
+
+= What if I need to transform a custom term meta value in a different way? =
+
+If you need to perform transforms on term meta values other than the built-in ones for attachments, you can use your own transform key and add filters to handle the transform. For example, if you have a term meta field `color` that stores a hex color value and you want to prepend a "#", you'll need to set the block attributes to use your custom term meta key and custom transform key:
+
+```js
+{
+	[...]
+	attributes: {
+		metadata: {
+			bindings: {
+				content: {
+					source: 'term-query/term-meta',
+					args: {
+						'key': 'my_color',
+						'transform: 'prepend_octothorpe',
+					},
+				},
+			},
+		},
+	},
+	[...]
+}
+```
+
+And then you'll need to add a filter in PHP (front end):
+
+```php
+add_filter( 'term_query_term_meta_transform_prepend_octothorpe', function( $value ) {
+	return '#' . $value;
+} );
+```
+
+...and JS (block editor):
+
+```js
+addFilter( 'termQuery.termMetaTransform.prepend_octothorpe', 'me/my-plugin/prepend-octothorpe', function( value ) {
+	return `#${value}`;
 } );
 ```
 

@@ -42,11 +42,15 @@ Inside the Term Template block, you can add [certain blocks](#block-variations) 
 | Argument | Possible Values | Description |
 | --- | --- | --- |
 | `key` | Any meta key | The key of the term meta to display. |
-| `transform` | `attachmentURL`, `attachmentImageAlt` | A transformation to apply to the meta value. Transformations are detailed below. |
+| `transform` | `attachment_id_to_url`, `attachment_id_to_image_alt`, custom transform key | A transformation to apply to the meta value. Built-in transformations are detailed below. |
 
 ### Transformations
 
-Term meta values often contain just an ID that needs to be transformed into a useable value. The following transformations are available:
+Term meta values often contain values that must be transformed into something else to be useable, such as an attachment ID into a URL.
 
-- **attachmentURL**: Transforms an attachment ID into the URL of the attachment.
-- **attachmentImageAlt**: Transforms an attachment ID into the alt text of the attachment.
+The following transformations are available in the plugin:
+
+- **attachment_id_to_url**: Transforms an attachment ID into the URL of the attachment.
+- **attachment_id_to_image_alt**: Transforms an attachment ID into the alt text of the attachment.
+
+To create a custom transform, you can use the `term_query_term_meta_transform_{$transform_key}` filter in PHP for the front end and the `termQuery.termMetaTransform.{$transformKey}` filter in JavaScript for the editor. See [includes/transforms.php](/includes/transforms.php) and [src/editor/transforms.js](/src/editor/transforms.js) to reference how the built-in transforms are implemented.
