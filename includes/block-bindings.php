@@ -80,7 +80,7 @@ function get_term_value( array $source_args, WP_Block $block_instance, string $a
 	// Additional keys that require special handling.
 	return match ( $source_args['key'] ) {
 		'link' => get_term_link( $term ),
-		default => $term_id,
+		default => null,
 	};
 }
 
