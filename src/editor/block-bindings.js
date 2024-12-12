@@ -6,6 +6,8 @@ import { registerBlockBindingsSource } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { store as coreDataStore } from '@wordpress/core-data';
 
+import { applyFilters } from './hooks';
+
 const TERM_KEYS = [
 	'count',
 	'description',
@@ -77,7 +79,7 @@ registerBlockBindingsSource( {
  */
 registerBlockBindingsSource( {
 	'name': 'term-query/term-meta',
-	usesContext: [ 'term-query/termId' ],
+	usesContext: [ 'term-query/termId', 'term-query/taxonomy' ],
 	getValues( { select, context, bindings } ) {
 		const values = {};
 
@@ -94,14 +96,33 @@ registerBlockBindingsSource( {
 		const { meta } = term;
 
 		for ( const [attributeName, source ] of Object.entries( bindings ) ) {
-			const { key, transform } = source.args;
+			const { args } = source;
+			const { key, transform } = args;
 
 			if ( meta[ key ] ) {
 
+				/**
+				 * Filter all term meta values.
+				 *
+				 * @param {*} value The raw meta value.
+				 * @param {Object} args The binding arguments.
+				 * @param {Function} select The select function.
+				 * @return {*} The filtered value.
+				 */
+				let value = applyFilters( 'termQuery.termMeta', meta[ key ], args, select );
+
 				if ( transform ) {
-					values[ attributeName ] = transformValue( meta[ key ], transform, select );
+					/**
+					 * Filter term meta transform values by key.
+					 *
+					 * @param {*} value The raw meta value.
+					 * @param {Object} args The binding arguments.
+					 * @param {Function} select The select function.
+					 * @return {*} The filtered value.
+					 */
+					values[ attributeName ] = applyFilters( `termQuery.termMetaTransform.${transform}`, value, args, select );
 				} else {
-					values[ attributeName ] = meta[ key ];
+					values[ attributeName ] = value;
 				}
 			}
 		}
@@ -133,17 +154,3 @@ registerBlockBindingsSource( {
 		}, {} );
 	}
 } );
-
-/**
- * Transform the value based on the transform type.
- */
-function transformValue( value, type, select ) {
-	switch ( type ) {
-		case 'attachmentURL':
-			return select( coreDataStore ).getMedia( value )?.source_url;
-		case 'attachmentImageAlt':
-			return select( coreDataStore ).getMedia( value )?.alt_text;
-		default:
-			return value;
-	}
-}
