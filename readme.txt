@@ -108,5 +108,8 @@ WordPress does not currently have any iconography that represents the general co
 
 == Changelog ==
 
+= 0.2.0 =
+* Updated branding and screenshots
+
 = 0.1.0 =
 * Pre-release
