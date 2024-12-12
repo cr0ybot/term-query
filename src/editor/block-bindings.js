@@ -7,6 +7,7 @@ import { __ } from '@wordpress/i18n';
 import { store as coreDataStore } from '@wordpress/core-data';
 
 import { applyFilters } from './hooks';
+import './transforms';
 
 const TERM_KEYS = [
 	'count',
