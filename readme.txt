@@ -148,6 +148,10 @@ WordPress does not currently have any iconography that represents the general co
 
 == Changelog ==
 
+= 0.3.0 =
+* Added support for custom term meta transforms via filter hooks
+* Added fix for WooCommerce product category images not displaying in the block editor
+
 = 0.2.0 =
 * Updated branding and screenshots
 
