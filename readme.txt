@@ -1,4 +1,4 @@
-=== Term Query ===
+=== Term Query Loop Block ===
 Contributors:      cr0ybot
 Tags:              block
 Tested up to:      6.7
