@@ -17,7 +17,7 @@ if ( ! function_exists( 'ctq_build_query_vars_from_term_query_block' ) ) {
 	 * @param WP_Block $block The block object.
 	 * @param int      $page The current page.
 	 */
-	function ctq_build_query_vars_from_term_query_block( $block, $page ) {
+	function ctq_build_query_vars_from_term_query_block( $block, $page, $args = array() ) {
 		$query_args = array(
 			'offset' => 0,
 		);
@@ -37,6 +37,9 @@ if ( ! function_exists( 'ctq_build_query_vars_from_term_query_block' ) ) {
 			$query_args['parent']     = $context_query['parent'];
 		}
 
+		// Merge with additional args.
+		$query_args = array_merge( $query_args, $args );
+
 		return $query_args;
 	}
 }
@@ -48,39 +51,53 @@ $page = empty( $_GET[ $page_key ] ) ? 1 : (int) $_GET[ $page_key ];
 // Use global query if needed.
 $use_global_query = ( isset( $block->context['term-query/query']['inherit'] ) && $block->context['term-query/query']['inherit'] );
 if ( $use_global_query ) {
-	global $wp_query;
-
-	$context_query = $block->context['term-query/query'];
-
-	if ( ! in_the_loop() && ( is_category() || is_tag() || is_tax() ) ) {
-		/**
-		 * If the global query is for a term archive, get the child terms.
-		 *
-		 * Note: This is a little awkward since the taxonomy must be selected in
-		 * the block settings currently.
-		 *
-		 * @todo Inherit taxonomy?
-		 */
-		$terms = get_terms(
+	if ( isset( $block->context['term-query/termId'] ) ) {
+		// If termId is already provided in context, use that as parent.
+		$term_id    = $block->context['term-query/termId'];
+		$query_args = ctq_build_query_vars_from_term_query_block(
+			$block,
+			$page,
 			array(
-				'taxonomy'   => $block->context['term-query/taxonomy'],
-				'parent'     => $wp_query->get_queried_object_id(),
-				'hide_empty' => $context_query['hideEmpty'],
-			)
+				'parent' => $term_id,
+			),
 		);
-	} elseif ( is_single() || in_the_loop() ) {
-		/**
-		 * If the global query is for a single post or we're in the main loop,
-		 * get the terms from the post.
-		 */
-		$terms = get_the_terms( get_the_ID(), $block->context['term-query/taxonomy'] );
+		$query      = new WP_Term_Query( $query_args );
+		$terms      = $query->get_terms();
 	} else {
-		/**
-		 * Otherwise, get the postID from context.
-		 */
-		// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-		$post_id = $block->context['postId'];
-		$terms   = get_the_terms( $post_id, $block->context['term-query/taxonomy'] );
+		global $wp_query;
+
+		$context_query = $block->context['term-query/query'];
+
+		if ( ! in_the_loop() && ( is_category() || is_tag() || is_tax() ) ) {
+			/**
+			 * If the global query is for a term archive, get the child terms.
+			 *
+			 * Note: This is a little awkward since the taxonomy must be selected in
+			 * the block settings currently.
+			 *
+			 * @todo Inherit taxonomy?
+			 */
+			$terms = get_terms(
+				array(
+					'taxonomy'   => $block->context['term-query/taxonomy'],
+					'parent'     => $wp_query->get_queried_object_id(),
+					'hide_empty' => $context_query['hideEmpty'],
+				)
+			);
+		} elseif ( is_single() || in_the_loop() ) {
+			/**
+			 * If the global query is for a single post or we're in the main loop,
+			 * get the terms from the post.
+			 */
+			$terms = get_the_terms( get_the_ID(), $block->context['term-query/taxonomy'] );
+		} else {
+			/**
+			 * Otherwise, get the postID from context.
+			 */
+			// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+			$post_id = $block->context['postId'];
+			$terms   = get_the_terms( $post_id, $block->context['term-query/taxonomy'] );
+		}
 	}
 } else {
 	$query_args = ctq_build_query_vars_from_term_query_block( $block, $page );

@@ -13,6 +13,7 @@
 		"term-query/queryId",
 		"term-query/query",
 		"term-query/taxonomy",
+		"term-query/termId",
 		"term-query/stickyTerms",
 		"term-query/displayLayout",
 		"templateSlug",
