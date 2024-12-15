@@ -21,16 +21,16 @@ add_filter( 'term_query_term_meta_transform_attachment_id_to_image_alt', __NAMES
  *
  * @param mixed $meta_value The meta value, an attachment ID.
  * @param array $args The binding args.
- * @return string|null The attachment URL or null.
+ * @return string The attachment URL or empty string.
  */
 function attachment_id_to_url( mixed $meta_value, array $args ) {
 	if ( ! is_numeric( $meta_value ) ) {
-		return null;
+		return '';
 	}
 
 	$url = wp_get_attachment_image_url( $meta_value, $args['size'] ?? 'full' );
 	if ( ! $url ) {
-		return null;
+		return '';
 	}
 
 	return $url;
@@ -41,16 +41,16 @@ function attachment_id_to_url( mixed $meta_value, array $args ) {
  *
  * @param mixed $meta_value The meta value, an attachment ID.
  * @param array $args The binding args.
- * @return string|null The attachment alt text or null.
+ * @return string The attachment alt text or empty string.
  */
 function attachment_id_to_image_alt( mixed $meta_value, array $args ) {
 	if ( ! is_numeric( $meta_value ) ) {
-		return null;
+		return '';
 	}
 
 	$alt = get_post_meta( $meta_value, '_wp_attachment_id_to_image_alt', true );
 	if ( ! $alt ) {
-		return null;
+		return '';
 	}
 
 	return $alt;
