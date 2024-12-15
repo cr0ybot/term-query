@@ -172,6 +172,7 @@ export default function TermTemplateEdit( {
 				//offset: offset || 0,
 				order,
 				orderby: orderBy,
+				parent,
 			};
 
 			if ( perPage ) {
