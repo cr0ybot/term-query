@@ -148,6 +148,10 @@ WordPress does not currently have any iconography that represents the general co
 
 == Changelog ==
 
+= 0.3.1 =
+* Fix child terms showing in block editor
+* Fix JS error when transform is empty/invalid
+
 = 0.3.0 =
 * Added support for custom term meta transforms via filter hooks
 * Added fix for WooCommerce product category images not displaying in the block editor
