@@ -15,7 +15,7 @@ addFilter( 'termQuery.termMetaTransform.attachment_id_to_image_alt', 'term-query
  * @param {Function} select Select function.
  * @return {string} Attachment URL or empty string.
  */
-const attachment_id_to_url = ( value, args, select ) => {
+function attachment_id_to_url( value, args, select ) {
 	// If value is not numeric, return early.
 	if ( isNaN( value ) ) {
 		return '';
@@ -38,7 +38,7 @@ const attachment_id_to_url = ( value, args, select ) => {
  * @param {Function} select Select function.
  * @return {string} Attachment image alt or empty string.
  */
-const attachment_id_to_image_alt = ( value, args, select ) => {
+function attachment_id_to_image_alt( value, args, select ) {
 	// If value is not numeric, return early.
 	if ( isNaN( value ) ) {
 		return '';
