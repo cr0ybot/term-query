@@ -3,6 +3,7 @@ import { useInstanceId } from '@wordpress/compose';
 import { useEffect } from '@wordpress/element';
 import {
 	BlockControls,
+	BlockContextProvider,
 	InspectorControls,
 	useBlockProps,
 	store as blockEditorStore,
@@ -19,20 +20,27 @@ const DEFAULTS_POSTS_PER_PAGE = 10;
 
 const TEMPLATE = [ [ 'cr0ybot/term-template' ] ];
 
-export default function QueryContent( {
-	attributes,
-	setAttributes,
-	openPatternSelectionModal,
-	name,
-	clientId,
-} ) {
+export default function QueryContent( props ) {
+	const {
+		attributes,
+		setAttributes,
+		openPatternSelectionModal,
+		name,
+		clientId,
+		context,
+	} = props;
 	const {
 		queryId,
 		query,
+		taxonomy: taxonomyAttribute,
 		displayLayout,
 		tagName: TagName = 'div',
 		query: { inherit } = {},
 	} = attributes;
+	const {
+		'term-query/queryId': queryIdContext,
+		'term-query/taxonomy': taxonomyContext,
+	} = context;
 	const { __unstableMarkNextChangeAsNotPersistent } =
 		useDispatch( blockEditorStore );
 	const instanceId = useInstanceId( QueryContent );
@@ -50,6 +58,11 @@ export default function QueryContent( {
 			postsPerPage: settingPerPage || DEFAULTS_POSTS_PER_PAGE,
 		};
 	}, [] );
+
+	// Maybe inherit taxonomy from global query if not set in the block.
+	const taxonomyInherited = inherit && ! taxonomyAttribute && queryIdContext && taxonomyContext;
+	const taxonomy = taxonomyInherited ? taxonomyContext : taxonomyAttribute;
+
 	// There are some effects running where some initialization logic is
 	// happening and setting some values to some attributes (ex. queryId).
 	// These updates can cause an `undo trap` where undoing will result in
@@ -102,11 +115,9 @@ export default function QueryContent( {
 	return (
 		<>
 			<QueryInspectorControls
-				attributes={ attributes }
+				{ ...props }
 				setQuery={ updateQuery }
-				setDisplayLayout={ updateDisplayLayout }
-				setAttributes={ setAttributes }
-				clientId={ clientId }
+				taxonomy={ taxonomy }
 			/>
 			<BlockControls>
 				<QueryToolbar
@@ -134,7 +145,16 @@ export default function QueryContent( {
 					help={ htmlElementMessages[ TagName ] }
 				/>
 			</InspectorControls>
-			<TagName { ...innerBlocksProps } />
+			{ !!taxonomyInherited ? (
+				<BlockContextProvider
+					key="term-query/taxonomy"
+					value={ taxonomyInherited }
+				>
+					<TagName { ...innerBlocksProps } />
+				</BlockContextProvider>
+			) : (
+				<TagName { ...innerBlocksProps } />
+			) }
 		</>
 	);
 }

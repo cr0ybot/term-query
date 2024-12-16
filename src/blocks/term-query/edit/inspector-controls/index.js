@@ -22,7 +22,12 @@ import {
 export default function QueryInspectorControls( props ) {
 	const { attributes, setQuery, setDisplayLayout, setAttributes } =
 		props;
-	const { query, taxonomy, stickyTerms, displayLayout } = attributes;
+	const {
+		query,
+		taxonomy,
+		stickyTerms,
+		displayLayout,
+	} = attributes;
 	const {
 		order,
 		orderBy,
@@ -84,6 +89,7 @@ export default function QueryInspectorControls( props ) {
 								<TaxonomyControl
 									onChange={ updateTaxonomy }
 									taxonomy={ taxonomy }
+									inherited={ inherit }
 								/>
 							) }
 							{ showStickyTermsControl && (

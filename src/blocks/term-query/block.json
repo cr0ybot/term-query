@@ -47,6 +47,11 @@
 		"term-query/stickyTerms": "stickyTerms",
 		"term-query/displayLayout": "displayLayout"
 	},
+	"usesContext": [
+		"term-query/queryId",
+		"term-query/query",
+		"term-query/taxonomy"
+	],
 	"supports": {
 		"align": [
 			"wide",
