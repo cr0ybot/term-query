@@ -74,9 +74,15 @@ export default function QueryContent( props ) {
 	// would cause to override previous wanted changes.
 	useEffect( () => {
 		const newQuery = {};
+		let newInherit = inherit;
+		// Update inherit if context is available.
+		if ( taxonomyContext && ! inherit ) {
+			newQuery.inherit = true;
+			newInherit = true;
+		}
 		// When we inherit from global query always need to set the `perPage`
 		// based on the reading settings.
-		if ( inherit && query.perPage !== postsPerPage ) {
+		if ( newInherit && query.perPage !== postsPerPage ) {
 			newQuery.perPage = postsPerPage;
 		} else if ( ! query.perPage && postsPerPage ) {
 			newQuery.perPage = postsPerPage;
@@ -85,7 +91,7 @@ export default function QueryContent( props ) {
 			__unstableMarkNextChangeAsNotPersistent();
 			updateQuery( newQuery );
 		}
-	}, [ query.perPage, postsPerPage, inherit ] );
+	}, [ query.perPage, postsPerPage, inherit, taxonomyContext ] );
 	// We need this for multi-query block pagination.
 	// Query parameters for each block are scoped to their ID.
 	useEffect( () => {
