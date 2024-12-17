@@ -164,7 +164,7 @@ export default function TermTemplateEdit( {
 } ) {
 	const { type: layoutType, columnCount = 3 } = layout || {};
 	const [ activeBlockContextId, setActiveBlockContextId ] = useState();
-	const { terms, blocks } = useSelect(
+	const { terms, termsLoading, blocks } = useSelect(
 		( select ) => {
 			const { getEntityRecords } = select( coreStore );
 			const { getBlocks } = select( blockEditorStore );
@@ -228,6 +228,19 @@ export default function TermTemplateEdit( {
 				}
 			}
 
+			const termsLoading = select('core/data').isResolving(
+				'core',
+				'getEntityRecords',
+				[
+					'taxonomy',
+					taxonomy,
+					{
+						...query,
+						...restQueryArgs,
+					},
+				]
+			);
+
 			return {
 				terms: [
 					...(fetchedStickyTerms ?? []),
@@ -236,6 +249,7 @@ export default function TermTemplateEdit( {
 						...restQueryArgs,
 					} ) ?? []),
 				],
+				termsLoading,
 				blocks: getBlocks( clientId ),
 			};
 		},
@@ -273,7 +287,7 @@ export default function TermTemplateEdit( {
 		} ),
 	} );
 
-	if ( ! terms ) {
+	if ( termsLoading ) {
 		return (
 			<p { ...blockProps }>
 				<Spinner />
