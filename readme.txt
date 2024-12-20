@@ -2,7 +2,7 @@
 Contributors:      cr0ybot
 Tags:              block
 Tested up to:      6.7
-Stable tag:        0.3.2
+Stable tag:        0.4.0
 License:           GPL-3.0-or-later
 License URI:       (https://www.gnu.org/licenses/gpl-3.0.html)
 
