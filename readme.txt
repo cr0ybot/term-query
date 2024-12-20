@@ -148,6 +148,9 @@ WordPress does not currently have any iconography that represents the general co
 
 == Changelog ==
 
+= 0.4.0 =
+* Add support for nested Term Query Loop blocks, inheriting the taxonomy and term
+
 = 0.3.2 =
 * Fix lexical declaration error in JS transforms
 
