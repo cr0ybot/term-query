@@ -8,7 +8,7 @@ import clsx from 'clsx';
  */
 import { memo, useMemo, useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
-import { __, _x } from '@wordpress/i18n';
+import { __, _x, sprintf } from '@wordpress/i18n';
 import {
 	BlockControls,
 	BlockContextProvider,
@@ -153,6 +153,7 @@ export default function TermTemplateEdit( {
 			...restQueryArgs
 		} = {},
 		'term-query/taxonomy': taxonomy,
+		'term-query/termId': termId,
 		'term-query/stickyTerms': stickyTerms,
 		templateSlug,
 		previewPostType,
@@ -163,7 +164,7 @@ export default function TermTemplateEdit( {
 } ) {
 	const { type: layoutType, columnCount = 3 } = layout || {};
 	const [ activeBlockContextId, setActiveBlockContextId ] = useState();
-	const { terms, blocks } = useSelect(
+	const { terms, termsLoading, blocks } = useSelect(
 		( select ) => {
 			const { getEntityRecords } = select( coreStore );
 			const { getBlocks } = select( blockEditorStore );
@@ -198,29 +199,47 @@ export default function TermTemplateEdit( {
 
 			// If `inherit` is truthy, adjust the query conditionally to create a better preview.
 			if ( inherit ) {
-				const { isSingular, templateType, templateQuery } = getQueryContextFromTemplate( templateSlug );
+				if ( termId ) {
+					// If termId is already provided in context, use that as parent.
+					query.parent = termId;
+				} else {
+					const { isSingular, templateType, templateQuery } = getQueryContextFromTemplate( templateSlug );
 
-				if ( isSingular ) {
-					// If we're on a post, get only the terms for the current post.
-					query.post = postId;
-				} else if ( templateType === taxonomy ) {
-					// If we're on a specific term archive template, fetch the term ID to use as the parent.
-					if ( templateQuery ) {
-						const templateTaxonomy =
-							templateType === taxonomy &&
-							getEntityRecords( 'taxonomy', taxonomy, {
-								context: 'view',
-								per_page: 1,
-								_fields: [ 'id' ],
-								slug: templateQuery,
-							} );
+					if ( isSingular ) {
+						// If we're on a post, get only the terms for the current post.
+						query.post = postId;
+					} else if ( templateType === taxonomy ) {
+						// If we're on a specific term archive template, fetch the term ID to use as the parent.
+						if ( templateQuery ) {
+							const templateTaxonomy =
+								templateType === taxonomy &&
+								getEntityRecords( 'taxonomy', taxonomy, {
+									context: 'view',
+									per_page: 1,
+									_fields: [ 'id' ],
+									slug: templateQuery,
+								} );
 
-						if ( templateTaxonomy ) {
-							query.parent = templateTaxonomy[ 0 ]?.id;
+							if ( templateTaxonomy ) {
+								query.parent = templateTaxonomy[ 0 ]?.id ?? 0;
+							}
 						}
 					}
 				}
 			}
+
+			const termsLoading = select('core/data').isResolving(
+				'core',
+				'getEntityRecords',
+				[
+					'taxonomy',
+					taxonomy,
+					{
+						...query,
+						...restQueryArgs,
+					},
+				]
+			);
 
 			return {
 				terms: [
@@ -230,6 +249,7 @@ export default function TermTemplateEdit( {
 						...restQueryArgs,
 					} ) ?? []),
 				],
+				termsLoading,
 				blocks: getBlocks( clientId ),
 			};
 		},
@@ -267,11 +287,18 @@ export default function TermTemplateEdit( {
 		} ),
 	} );
 
-	if ( ! terms ) {
+	if ( termsLoading ) {
 		return (
-			<p { ...blockProps }>
-				<Spinner />
-			</p>
+			<div { ...blockProps }>
+				<p className="wp-block-term-query__loading">
+					<Spinner />
+					{ sprintf(
+						/* translators: %s: taxonomy slug */
+						__( 'Loading %s terms…', 'term-query' ),
+						taxonomy
+					) }
+				</p>
+			</div>
 		);
 	}
 

@@ -3,6 +3,7 @@ import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 import { useState, useEffect } from '@wordpress/element';
 import { useDebounce } from '@wordpress/compose';
+import { __ } from '@wordpress/i18n';
 
 const EMPTY_ARRAY = [];
 const BASE_QUERY = {
@@ -15,7 +16,7 @@ const BASE_QUERY = {
  * Renders a `FormTokenField` for the given taxonomy.
  *
  * @param {Object}   props          The props for the component.
- * @param {Object}   props.taxonomy The taxonomy object.
+ * @param {string}   props.taxonomy The taxonomy slug.
  * @param {number[]} props.stickyTerms  An array with the block's term ids for the given taxonomy.
  * @param {Function} props.onChange Callback `onChange` function.
  * @return {JSX.Element} The rendered component.
@@ -34,7 +35,7 @@ export default function StickyTermsControl( { taxonomy, stickyTerms, onChange } 
 				select( coreStore );
 			const selectorArgs = [
 				'taxonomy',
-				taxonomy.slug,
+				taxonomy,
 				{
 					...BASE_QUERY,
 					search,
@@ -110,7 +111,7 @@ export default function StickyTermsControl( { taxonomy, stickyTerms, onChange } 
 			<FormTokenField
 				__nextHasNoMarginBottom
 				__next40pxDefaultSize
-				label={ taxonomy.name }
+				label={ __( 'Sticky Terms', 'term-query' ) }
 				value={ value }
 				onInputChange={ debouncedSearch }
 				suggestions={ suggestions }

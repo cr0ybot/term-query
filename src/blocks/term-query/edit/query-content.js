@@ -3,6 +3,7 @@ import { useInstanceId } from '@wordpress/compose';
 import { useEffect } from '@wordpress/element';
 import {
 	BlockControls,
+	BlockContextProvider,
 	InspectorControls,
 	useBlockProps,
 	store as blockEditorStore,
@@ -19,20 +20,27 @@ const DEFAULTS_POSTS_PER_PAGE = 10;
 
 const TEMPLATE = [ [ 'cr0ybot/term-template' ] ];
 
-export default function QueryContent( {
-	attributes,
-	setAttributes,
-	openPatternSelectionModal,
-	name,
-	clientId,
-} ) {
+export default function QueryContent( props ) {
+	const {
+		attributes,
+		setAttributes,
+		openPatternSelectionModal,
+		name,
+		clientId,
+		context,
+	} = props;
 	const {
 		queryId,
 		query,
+		taxonomy: taxonomyAttribute,
 		displayLayout,
 		tagName: TagName = 'div',
 		query: { inherit } = {},
 	} = attributes;
+	const {
+		'term-query/queryId': queryIdContext,
+		'term-query/taxonomy': taxonomyContext,
+	} = context;
 	const { __unstableMarkNextChangeAsNotPersistent } =
 		useDispatch( blockEditorStore );
 	const instanceId = useInstanceId( QueryContent );
@@ -50,6 +58,18 @@ export default function QueryContent( {
 			postsPerPage: settingPerPage || DEFAULTS_POSTS_PER_PAGE,
 		};
 	}, [] );
+
+	// Maybe inherit taxonomy from global query if not set in the block.
+	const taxonomyInherited = inherit && ! taxonomyAttribute && (!!queryIdContext && !!taxonomyContext);
+	const taxonomy = taxonomyInherited ? taxonomyContext : taxonomyAttribute;
+
+	/**
+	 * The term-query/taxonomy context is not declared in the block.json file's
+	 * `providersContext` property so that we can control the value without
+	 * being beholden to the block's attribute value.
+	 */
+	const taxonomyContextObject = { 'term-query/taxonomy': taxonomy };
+
 	// There are some effects running where some initialization logic is
 	// happening and setting some values to some attributes (ex. queryId).
 	// These updates can cause an `undo trap` where undoing will result in
@@ -61,9 +81,15 @@ export default function QueryContent( {
 	// would cause to override previous wanted changes.
 	useEffect( () => {
 		const newQuery = {};
+		let newInherit = inherit;
+		// Update inherit if context is available.
+		if ( taxonomyContext && ! inherit ) {
+			newQuery.inherit = true;
+			newInherit = true;
+		}
 		// When we inherit from global query always need to set the `perPage`
 		// based on the reading settings.
-		if ( inherit && query.perPage !== postsPerPage ) {
+		if ( newInherit && query.perPage !== postsPerPage ) {
 			newQuery.perPage = postsPerPage;
 		} else if ( ! query.perPage && postsPerPage ) {
 			newQuery.perPage = postsPerPage;
@@ -72,7 +98,7 @@ export default function QueryContent( {
 			__unstableMarkNextChangeAsNotPersistent();
 			updateQuery( newQuery );
 		}
-	}, [ query.perPage, postsPerPage, inherit ] );
+	}, [ query.perPage, postsPerPage, inherit, taxonomyContext ] );
 	// We need this for multi-query block pagination.
 	// Query parameters for each block are scoped to their ID.
 	useEffect( () => {
@@ -102,11 +128,14 @@ export default function QueryContent( {
 	return (
 		<>
 			<QueryInspectorControls
-				attributes={ attributes }
+				{ ...props }
 				setQuery={ updateQuery }
-				setDisplayLayout={ updateDisplayLayout }
-				setAttributes={ setAttributes }
-				clientId={ clientId }
+				attributes={
+					{
+						...attributes,
+						taxonomy, // Maybe override taxonomy with inherited value.
+					}
+				}
 			/>
 			<BlockControls>
 				<QueryToolbar
@@ -134,7 +163,11 @@ export default function QueryContent( {
 					help={ htmlElementMessages[ TagName ] }
 				/>
 			</InspectorControls>
-			<TagName { ...innerBlocksProps } />
+			<BlockContextProvider
+				value={ taxonomyContextObject }
+			>
+				<TagName { ...innerBlocksProps } />
+			</BlockContextProvider>
 		</>
 	);
 }

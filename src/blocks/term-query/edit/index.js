@@ -8,14 +8,20 @@ import QueryContent from './query-content';
 import QueryPlaceholder from './query-placeholder';
 
 const QueryEdit = ( props ) => {
-	const { attributes, clientId } = props;
+	const { attributes, clientId, context } = props;
 	const { taxonomy } = attributes;
+	const {
+		'term-query/queryId': queryIdContext,
+		'term-query/taxonomy': taxonomyContext,
+	} = context;
+
 	const hasInnerBlocks = useSelect(
 		( select ) =>
 			!! select( blockEditorStore ).getBlocks( clientId ).length,
 		[ clientId ]
 	);
-	const Component = hasInnerBlocks || taxonomy ? QueryContent : QueryPlaceholder;
+
+	const Component = hasInnerBlocks || taxonomy || (queryIdContext && taxonomyContext) ? QueryContent : QueryPlaceholder;
 	return (
 		<Component
 			{ ...props }
