@@ -8,7 +8,7 @@ import clsx from 'clsx';
  */
 import { memo, useMemo, useState } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
-import { __, _x } from '@wordpress/i18n';
+import { __, _x, sprintf } from '@wordpress/i18n';
 import {
 	BlockControls,
 	BlockContextProvider,
@@ -289,9 +289,16 @@ export default function TermTemplateEdit( {
 
 	if ( termsLoading ) {
 		return (
-			<p { ...blockProps }>
-				<Spinner />
-			</p>
+			<div { ...blockProps }>
+				<p className="wp-block-term-query__loading">
+					<Spinner />
+					{ sprintf(
+						/* translators: %s: taxonomy slug */
+						__( 'Loading %s terms…', 'term-query' ),
+						taxonomy
+					) }
+				</p>
+			</div>
 		);
 	}
 
