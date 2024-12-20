@@ -43,7 +43,6 @@
 	"providesContext": {
 		"term-query/queryId": "queryId",
 		"term-query/query": "query",
-		"term-query/taxonomy": "taxonomy",
 		"term-query/stickyTerms": "stickyTerms",
 		"term-query/displayLayout": "displayLayout"
 	},

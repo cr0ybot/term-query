@@ -60,8 +60,15 @@ export default function QueryContent( props ) {
 	}, [] );
 
 	// Maybe inherit taxonomy from global query if not set in the block.
-	const taxonomyInherited = inherit && ! taxonomyAttribute && queryIdContext && taxonomyContext;
+	const taxonomyInherited = inherit && ! taxonomyAttribute && (!!queryIdContext && !!taxonomyContext);
 	const taxonomy = taxonomyInherited ? taxonomyContext : taxonomyAttribute;
+
+	/**
+	 * The term-query/taxonomy context is not declared in the block.json file's
+	 * `providersContext` property so that we can control the value without
+	 * being beholden to the block's attribute value.
+	 */
+	const taxonomyContextObject = { 'term-query/taxonomy': taxonomy };
 
 	// There are some effects running where some initialization logic is
 	// happening and setting some values to some attributes (ex. queryId).
@@ -123,7 +130,12 @@ export default function QueryContent( props ) {
 			<QueryInspectorControls
 				{ ...props }
 				setQuery={ updateQuery }
-				taxonomy={ taxonomy }
+				attributes={
+					{
+						...attributes,
+						taxonomy, // Maybe override taxonomy with inherited value.
+					}
+				}
 			/>
 			<BlockControls>
 				<QueryToolbar
@@ -151,16 +163,11 @@ export default function QueryContent( props ) {
 					help={ htmlElementMessages[ TagName ] }
 				/>
 			</InspectorControls>
-			{ !!taxonomyInherited ? (
-				<BlockContextProvider
-					key="term-query/taxonomy"
-					value={ taxonomyInherited }
-				>
-					<TagName { ...innerBlocksProps } />
-				</BlockContextProvider>
-			) : (
+			<BlockContextProvider
+				value={ taxonomyContextObject }
+			>
 				<TagName { ...innerBlocksProps } />
-			) }
+			</BlockContextProvider>
 		</>
 	);
 }
