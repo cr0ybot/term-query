@@ -2,7 +2,7 @@
 Contributors:      cr0ybot
 Tags:              block
 Tested up to:      6.7
-Stable tag:        0.4.0
+Stable tag:        0.5.0
 License:           GPL-3.0-or-later
 License URI:       (https://www.gnu.org/licenses/gpl-3.0.html)
 
@@ -147,6 +147,9 @@ WordPress does not currently have any iconography that represents the general co
 3. Inherit the "query" to display terms for the current post or child terms on a term archive.
 
 == Changelog ==
+
+= 0.5.0 =
+* Add parent term control
 
 = 0.4.0 =
 * Add support for nested Term Query Loop blocks, inheriting the taxonomy and term
