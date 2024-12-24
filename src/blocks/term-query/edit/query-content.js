@@ -40,6 +40,7 @@ export default function QueryContent( props ) {
 	const {
 		'term-query/queryId': queryIdContext,
 		'term-query/taxonomy': taxonomyContext,
+		'term-query/termId': termIdContext,
 	} = context;
 	const { __unstableMarkNextChangeAsNotPersistent } =
 		useDispatch( blockEditorStore );
@@ -62,6 +63,10 @@ export default function QueryContent( props ) {
 	// Maybe inherit taxonomy from global query if not set in the block.
 	const taxonomyInherited = inherit && ! taxonomyAttribute && (!!queryIdContext && !!taxonomyContext);
 	const taxonomy = taxonomyInherited ? taxonomyContext : taxonomyAttribute;
+
+	// Maybe inherit parent from parent query if not set in the block.
+	const parentInherited = inherit && !!termIdContext;
+	const parent = parentInherited ? termIdContext : query.parent;
 
 	/**
 	 * The term-query/taxonomy context is not declared in the block.json file's
@@ -133,6 +138,7 @@ export default function QueryContent( props ) {
 				attributes={
 					{
 						...attributes,
+						query: { ...query, parent }, // Maybe override parent with inherited value.
 						taxonomy, // Maybe override taxonomy with inherited value.
 					}
 				}
