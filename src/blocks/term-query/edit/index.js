@@ -4,10 +4,11 @@
 import { useSelect } from '@wordpress/data';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 
+import withTermQueryProvider from '../../../queries/withTermQueryProvider';
 import QueryContent from './query-content';
 import QueryPlaceholder from './query-placeholder';
 
-const QueryEdit = ( props ) => {
+const TermQueryEdit = ( props ) => {
 	const { attributes, clientId, context } = props;
 	const { taxonomy } = attributes;
 	const {
@@ -29,4 +30,4 @@ const QueryEdit = ( props ) => {
 	);
 };
 
-export default QueryEdit;
+export default withTermQueryProvider( TermQueryEdit );
