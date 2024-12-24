@@ -11,7 +11,6 @@ export const ParentControl = ( { parent = 0, taxonomy, onChange, inherited } ) =
 	const [ searchInput, setSearchInput, debouncedSearch ] = useDebouncedInput( '' );
 	const {
 		data: termsData,
-
 	} = useTerms( {
 		taxonomy,
 		parent,
@@ -21,8 +20,6 @@ export const ParentControl = ( { parent = 0, taxonomy, onChange, inherited } ) =
 		data: currentTerm = null,
 	} = useTerm( taxonomy, parent );
 	const terms = termsData?.pages?.flat() ?? [];
-
-	console.log( { parent, currentTerm, terms } );
 
 	const handleChange = ( value ) => {
 		onChange( value ? parseInt( value ) : 0 );
