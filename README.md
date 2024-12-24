@@ -8,6 +8,8 @@ This is an attempt to fill a gap in WordPress core, see https://github.com/WordP
 
 Please note that this is still a work-in-progress. The plugin is not yet ready for production use. If you'd like to test it, [download the latest prerelease here](https://github.com/cr0ybot/term-query/releases/latest).
 
+This plugin supports [Git Updater](https://github.com/afragen/git-updater) for updating the plugin while in development. Branch switching is not currently supported, since there are assets that need to be built for each release.
+
 ## Blocks
 
 ### Taxonomy Terms: `cr0ybot/term-query`
