@@ -22,6 +22,7 @@ import { store as coreStore } from '@wordpress/core-data';
 import { list, grid } from '@wordpress/icons';
 
 import { getQueryContextFromTemplate } from './utils';
+import withTermQueryProvider from '../../queries/withTermQueryProvider';
 
 const TEMPLATE = [
 	[ 'core/image', {
@@ -130,7 +131,7 @@ function TermTemplateBlockPreview( {
 
 const MemoizedTermTemplateBlockPreview = memo( TermTemplateBlockPreview );
 
-export default function TermTemplateEdit( {
+function TermTemplateEdit( {
 	setAttributes,
 	clientId,
 	context: {
@@ -373,3 +374,5 @@ export default function TermTemplateEdit( {
 		</>
 	);
 }
+
+export default withTermQueryProvider( TermTemplateEdit );

@@ -11,6 +11,7 @@ import {
 } from '@wordpress/block-editor';
 
 import OrderControl from './order-control';
+import ParentControl from './parent-control';
 import TaxonomyControl from './taxonomy-control';
 import StickyTermsControl from './sticky-terms-control';
 import {
@@ -31,6 +32,7 @@ export default function QueryInspectorControls( props ) {
 	const {
 		order,
 		orderBy,
+		parent,
 		hideEmpty,
 		inherit,
 	} = query;
@@ -41,10 +43,11 @@ export default function QueryInspectorControls( props ) {
 		setAttributes( { taxonomy: value, stickyTerms: [] } );
 	};
 
+	const showInheritControl = isControlAllowed( allowedControls, 'inherit' );
 	const showTaxControl =
 		!! taxonomies?.length &&
 		isControlAllowed( allowedControls, 'taxonomy' );
-	const showInheritControl = isControlAllowed( allowedControls, 'inherit' );
+	const showParentControl = showTaxControl && isControlAllowed( allowedControls, 'parent' );
 	const showColumnsControl = false;
 	const showOrderControl =
 		! inherit && isControlAllowed( allowedControls, 'order' );
@@ -88,6 +91,16 @@ export default function QueryInspectorControls( props ) {
 							{ showTaxControl && (
 								<TaxonomyControl
 									onChange={ updateTaxonomy }
+									taxonomy={ taxonomy }
+									inherited={ inherit }
+								/>
+							) }
+							{ showParentControl && (
+								<ParentControl
+									onChange={ ( value ) =>
+										setQuery( { parent: value } )
+									}
+									parent={ parent }
 									taxonomy={ taxonomy }
 									inherited={ inherit }
 								/>
