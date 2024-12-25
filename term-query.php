@@ -11,6 +11,9 @@
  * License:           GPL-3.0-or-later
  * License URI:       (https://www.gnu.org/licenses/gpl-3.0.html)
  * Text Domain:       term-query
+ * GitHub Plugin URI: https://github.com/cr0ybot/term-query
+ * Primary Branch:    main
+ * Release Asset:     true
  *
  * @package term-query
  */
