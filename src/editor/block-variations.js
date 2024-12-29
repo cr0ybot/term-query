@@ -10,7 +10,7 @@ registerBlockVariation( 'core/heading', {
 	title: __( 'Term Name', 'term-query' ),
 	description: __( 'Displays the name of the current term within a Taxonomy Term block.', 'term-query' ),
 	isDefault: false,
-	scope: [ 'block', 'inserter', 'transform' ],
+	scope: [ 'block', 'transform' ],
 	attributes: {
 		metadata: {
 			bindings: {
@@ -31,7 +31,7 @@ registerBlockVariation( 'core/paragraph', {
 	title: __( 'Term Description', 'term-query' ),
 	description: __( 'Displays the description of the current term within a Taxonomy Term block.', 'term-query' ),
 	isDefault: false,
-	scope: [ 'block', 'inserter', 'transform' ],
+	scope: [ 'block', 'transform' ],
 	attributes: {
 		metadata: {
 			bindings: {
@@ -52,7 +52,7 @@ registerBlockVariation( 'core/paragraph', {
 	title: __( 'Term Count', 'term-query' ),
 	description: __( 'Displays the count of posts in the current term within a Taxonomy Term block.', 'term-query' ),
 	isDefault: false,
-	scope: [ 'block', 'inserter', 'transform' ],
+	scope: [ 'block', 'transform' ],
 	attributes: {
 		metadata: {
 			bindings: {
@@ -73,7 +73,7 @@ registerBlockVariation( 'core/button', {
 	title: __( 'Term Link', 'term-query' ),
 	description: __( 'Displays a button linking to the current term archive within a Taxonomy Term block.', 'term-query' ),
 	isDefault: false,
-	scope: [ 'block', 'inserter', 'transform' ],
+	scope: [ 'block', 'transform' ],
 	attributes: {
 		text: __( 'View posts', 'term-query' ),
 		metadata: {
