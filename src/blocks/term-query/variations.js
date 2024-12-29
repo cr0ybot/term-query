@@ -15,7 +15,7 @@ const variations = [
 		attributes: {},
 		innerBlocks: [
 			[
-				'term-query/term-template',
+				'cr0ybot/term-template',
 				{},
 				[
 					[ 'core/heading', {
@@ -57,7 +57,7 @@ const variations = [
 		attributes: {},
 		innerBlocks: [
 			[
-				'term-query/term-template',
+				'cr0ybot/term-template',
 				{},
 				[
 					[ 'core/heading', {
@@ -111,7 +111,7 @@ const variations = [
 		attributes: {},
 		innerBlocks: [
 			[
-				'term-query/term-template',
+				'cr0ybot/term-template',
 				{},
 				[
 					[ 'core/image', {
@@ -173,7 +173,7 @@ const variations = [
 		attributes: {},
 		innerBlocks: [
 			[
-				'term-query/term-template',
+				'cr0ybot/term-template',
 				{},
 				[
 					[ 'core/image', {
