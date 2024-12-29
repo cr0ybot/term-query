@@ -5,6 +5,12 @@
 	"title": "Term Query Loop",
 	"category": "theme",
 	"description": "An advanced block that allows displaying taxonomy terms based on different query parameters and visual configurations.",
+	"keywords": [
+		"taxonomy",
+		"term",
+		"query",
+		"loop"
+	],
 	"textdomain": "cr0ybot",
 	"attributes": {
 		"queryId": {
