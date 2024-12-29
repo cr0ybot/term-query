@@ -3,13 +3,17 @@
  */
 import { useSelect } from '@wordpress/data';
 import { store as blockEditorStore } from '@wordpress/block-editor';
+import { useState } from '@wordpress/element';
 
 import withTermQueryProvider from '../../../queries/withTermQueryProvider';
 import QueryContent from './query-content';
 import QueryPlaceholder from './query-placeholder';
+import { PatternSelectionModal } from './pattern-selection';
 
 const TermQueryEdit = ( props ) => {
 	const { attributes, clientId, context } = props;
+	const [ isPatternSelectionModalOpen, setIsPatternSelectionModalOpen ] =
+		useState( false );
 	const { taxonomy } = attributes;
 	const {
 		'term-query/queryId': queryIdContext,
@@ -22,11 +26,25 @@ const TermQueryEdit = ( props ) => {
 		[ clientId ]
 	);
 
-	const Component = hasInnerBlocks || taxonomy || (queryIdContext && taxonomyContext) ? QueryContent : QueryPlaceholder;
+	const Component = ( taxonomy && hasInnerBlocks ) || (queryIdContext && taxonomyContext) ? QueryContent : QueryPlaceholder;
 	return (
-		<Component
-			{ ...props }
-		/>
+		<>
+			<Component
+				{ ...props }
+				openPatternSelectionModal={ () =>
+					setIsPatternSelectionModalOpen( true )
+				}
+			/>
+			{ isPatternSelectionModalOpen && (
+				<PatternSelectionModal
+					clientId={ clientId }
+					attributes={ attributes }
+					setIsPatternSelectionModalOpen={
+						setIsPatternSelectionModalOpen
+					}
+				/>
+			) }
+		</>
 	);
 };
 
