@@ -89,6 +89,7 @@ export default function PatternSelection( {
 			<BlockContextProvider value={ blockPreviewContext }>
 				<BlockPatternsList
 					blockPatterns={ filteredBlockPatterns }
+					shownPatterns={ filteredBlockPatterns }
 					onClickPattern={ onBlockPatternSelect }
 					showTitlesAsTooltip={ showTitlesAsTooltip }
 				/>
