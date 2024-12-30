@@ -14,6 +14,9 @@ import OrderControl from './order-control';
 import ParentControl from './parent-control';
 import TaxonomyControl from './taxonomy-control';
 import StickyTermsControl from './sticky-terms-control';
+import PerPageControl from './per-page-control';
+import OffsetControl from './offset-control';
+import PagesControl from './pages-control';
 import {
 	useAllowedControls,
 	isControlAllowed,
@@ -63,6 +66,13 @@ export default function QueryInspectorControls( props ) {
 	const showHideEmptyControl =
 		showTaxControl &&
 		isControlAllowed( allowedControls, 'hideEmpty' );
+
+	const showPerPageControl = isControlAllowed( allowedControls, 'perPage' );
+	const showOffSetControl = isControlAllowed( allowedControls, 'offset' );
+	const showPagesControl = isControlAllowed( allowedControls, 'pages' );
+
+	const showDisplayPanel =
+		showPerPageControl || showOffSetControl || showPagesControl;
 
 	return (
 		<>
@@ -158,6 +168,34 @@ export default function QueryInspectorControls( props ) {
 							) }
 						</Flex>
 					</PanelBody>
+					{ ! inherit && showDisplayPanel && (
+						<PanelBody title={ __( 'Display' ) }>
+							{ showPerPageControl && (
+								<PerPageControl
+									perPage={ query.perPage }
+									onChange={ ( value ) =>
+										setQuery( { perPage: value } )
+									}
+								/>
+							) }
+							{ showOffSetControl && (
+								<OffsetControl
+									offset={ query.offset }
+									onChange={ ( value ) =>
+										setQuery( { offset: value } )
+									}
+								/>
+							) }
+							{ showPagesControl && (
+								<PagesControl
+									pages={ query.pages }
+									onChange={ ( value ) =>
+										setQuery( { pages: value } )
+									}
+								/>
+							) }
+						</PanelBody>
+					) }
 				</InspectorControls>
 			) }
 		</>

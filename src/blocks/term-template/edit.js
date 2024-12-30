@@ -25,26 +25,6 @@ import { getQueryContextFromTemplate } from './utils';
 import withTermQueryProvider from '../../queries/withTermQueryProvider';
 
 const TEMPLATE = [
-	[ 'core/image', {
-		metadata: {
-			bindings: {
-				url: {
-					source: 'term-query/term-meta',
-					args: {
-						'key': 'thumbnail_id',
-						'transform': 'attachment_id_to_url',
-					},
-				},
-				alt: {
-					source: 'term-query/term-meta',
-					args: {
-						'key': 'thumbnail_id',
-						'transform': 'attachment_id_to_image_alt',
-					},
-				},
-			},
-		},
-	} ],
 	[ 'core/heading', {
 		metadata: {
 			bindings: {

@@ -150,7 +150,7 @@ export function isControlAllowed( allowedControls, key ) {
 /**
  * Clones a pattern's blocks and then recurses over that list of blocks,
  * transforming them to retain some `query` attribute properties.
- * For now we retain the `postType` and `inherit` properties as they are
+ * For now we retain the `parent` and `inherit` properties as they are
  * fundamental for the expected functionality of the block and don't affect
  * its design and presentation.
  *
@@ -166,17 +166,17 @@ export const getTransformedBlocksFromPattern = (
 	queryBlockAttributes
 ) => {
 	const {
-		query: { postType, inherit },
+		query: { parent, inherit },
 	} = queryBlockAttributes;
 	const clonedBlocks = blocks.map( ( block ) => cloneBlock( block ) );
 	const queryClientIds = [];
 	const blocksQueue = [ ...clonedBlocks ];
 	while ( blocksQueue.length > 0 ) {
 		const block = blocksQueue.shift();
-		if ( block.name === 'core/query' ) {
+		if ( block.name === 'cr0ybot/term-query' ) {
 			block.attributes.query = {
 				...block.attributes.query,
-				postType,
+				parent,
 				inherit,
 			};
 			queryClientIds.push( block.clientId );
@@ -206,12 +206,12 @@ export function useBlockNameForPatterns( clientId, attributes ) {
 	const activeVariationName = useSelect(
 		( select ) =>
 			select( blocksStore ).getActiveBlockVariation(
-				'core/query',
+				'cr0ybot/term-query',
 				attributes
 			)?.name,
 		[ attributes ]
 	);
-	const blockName = `core/query/${ activeVariationName }`;
+	const blockName = `cr0ybot/term-query/${ activeVariationName }`;
 	const hasActiveVariationPatterns = useSelect(
 		( select ) => {
 			if ( ! activeVariationName ) {
@@ -228,7 +228,7 @@ export function useBlockNameForPatterns( clientId, attributes ) {
 		},
 		[ clientId, activeVariationName, blockName ]
 	);
-	return hasActiveVariationPatterns ? blockName : 'core/query';
+	return hasActiveVariationPatterns ? blockName : 'cr0ybot/term-query';
 }
 
 /**
@@ -261,10 +261,10 @@ export function useScopedBlockVariations( attributes ) {
 				select( blocksStore );
 			return {
 				activeVariationName: getActiveBlockVariation(
-					'core/query',
+					'cr0ybot/term-query',
 					attributes
 				)?.name,
-				blockVariations: getBlockVariations( 'core/query', 'block' ),
+				blockVariations: getBlockVariations( 'cr0ybot/term-query', 'block' ),
 			};
 		},
 		[ attributes ]

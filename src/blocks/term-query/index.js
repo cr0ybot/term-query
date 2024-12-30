@@ -11,10 +11,11 @@ import { registerBlockType } from '@wordpress/blocks';
 
 import './style.scss';
 
+import block from './block.json';
 import icon from './icon';
 import edit from './edit';
 import save from './save';
-import block from './block.json';
+import variations from './variations';
 
 /**
  * Register block
@@ -23,4 +24,5 @@ registerBlockType(block, {
 	icon,
 	edit,
 	save,
+	variations,
 });
