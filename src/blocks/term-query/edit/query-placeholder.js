@@ -82,7 +82,7 @@ function TaxonomyPicker({ attributes, setAttributes }) {
 function QueryVariationPicker( { clientId, attributes, openPatternSelectionModal } ) {
 	const scopeVariations = useScopedBlockVariations( attributes );
 	const { replaceInnerBlocks } = useDispatch( blockEditorStore );
-	const hasPatterns = !! useBlockPatterns( clientId, attributes ).length;
+
 
 	const handleSelectVariation = ( variation ) => {
 		if ( variation.innerBlocks ) {
@@ -132,15 +132,15 @@ function QueryVariationPicker( { clientId, attributes, openPatternSelectionModal
 					</li>
 				) ) }
 			</ul>
-			{ !! hasPatterns && (
+			{ !! openPatternSelectionModal && (
 				<FlexBlock>
 					<Button
 						__next40pxDefaultSize
-						variant="primary"
+						variant="secondary"
 						onClick={ openPatternSelectionModal }
 						style={{ marginLeft: 'auto' }}
 					>
-						{ __( 'Choose a pattern instead' ) }
+						{ __( 'Choose a pattern instead', 'term-query' ) }
 					</Button>
 				</FlexBlock>
 			) }
@@ -158,6 +158,7 @@ export default function QueryPlaceholder( {
 	const {
 		taxonomy,
 	} = attributes;
+	const [ isStartingBlank, setIsStartingBlank ] = useState( false );
 	const blockProps = useBlockProps();
 	const { blockType, activeBlockVariation } = useSelect(
 		( select ) => {
@@ -172,12 +173,14 @@ export default function QueryPlaceholder( {
 		},
 		[ name, attributes ]
 	);
+	const hasPatterns = !! useBlockPatterns( clientId, attributes ).length;
+	const showPatternChoice = !! hasPatterns && ! isStartingBlank;
 	const icon =
 		activeBlockVariation?.icon?.src ||
 		activeBlockVariation?.icon ||
 		blockType?.icon?.src;
 	const label = activeBlockVariation?.title || blockType?.title;
-	const instructions = taxonomy ? __( 'Select a variation to start with:', 'term-query' ) : __( 'Select a taxonomy to provide terms to display:', 'term-query' );
+	const instructions = ! taxonomy ? __( 'Select a taxonomy to provide terms to display:', 'term-query' ) : ( showPatternChoice ? __( 'Choose a pattern or start blank:', 'term-query' ) : __( 'Choose a variation to start with:', 'term-query' ) );
 
 	return (
 		<div { ...blockProps }>
@@ -192,12 +195,33 @@ export default function QueryPlaceholder( {
 						setAttributes={ setAttributes }
 					/>
 				) : (
-					<QueryVariationPicker
-						clientId={ clientId }
-						attributes={ attributes }
-						openPatternSelectionModal={ openPatternSelectionModal }
-					/>
-				) }
+					showPatternChoice ? (
+						<>
+							<Button
+								__next40pxDefaultSize
+								variant="primary"
+								onClick={ openPatternSelectionModal }
+							>
+								{ __( 'Choose a pattern', 'term-query' ) }
+							</Button>
+							<Button
+								__next40pxDefaultSize
+								variant="secondary"
+								onClick={ () => {
+									setIsStartingBlank( true );
+								} }
+							>
+								{ __( 'Start blank' ) }
+							</Button>
+						</>
+					) : (
+						<QueryVariationPicker
+							clientId={ clientId }
+							attributes={ attributes }
+							openPatternSelectionModal={ openPatternSelectionModal }
+						/>
+					)
+				)}
 			</Placeholder>
 		</div>
 	);
