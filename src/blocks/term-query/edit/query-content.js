@@ -32,14 +32,12 @@ export default function QueryContent( props ) {
 	const {
 		queryId,
 		query,
-		taxonomy: taxonomyAttribute,
 		displayLayout,
 		tagName: TagName = 'div',
 		query: { inherit } = {},
 	} = attributes;
 	const {
-		'term-query/queryId': queryIdContext,
-		'term-query/taxonomy': taxonomyContext,
+		'term-query/query': queryContext,
 		'term-query/termId': termIdContext,
 	} = context;
 	const { __unstableMarkNextChangeAsNotPersistent } =
@@ -60,20 +58,20 @@ export default function QueryContent( props ) {
 		};
 	}, [] );
 
-	// Maybe inherit taxonomy from global query if not set in the block.
-	const taxonomyInherited = inherit && ! taxonomyAttribute && (!!queryIdContext && !!taxonomyContext);
-	const taxonomy = taxonomyInherited ? taxonomyContext : taxonomyAttribute;
+	// Maybe inherit taxonomy from parent query.
+	const taxonomyInherited = inherit && !! queryContext;
+	const taxonomy = taxonomyInherited ? queryContext.taxonomy : query.taxonomy;
 
-	// Maybe inherit parent from parent query if not set in the block.
-	const parentInherited = inherit && !!termIdContext;
+	// Maybe inherit parent from parent query.
+	const parentInherited = inherit && !! termIdContext;
 	const parent = parentInherited ? termIdContext : query.parent;
 
 	/**
-	 * The term-query/taxonomy context is not declared in the block.json file's
+	 * The term-query/query context is not declared in the block.json file's
 	 * `providersContext` property so that we can control the value without
 	 * being beholden to the block's attribute value.
 	 */
-	const taxonomyContextObject = { 'term-query/taxonomy': taxonomy };
+	const termQueryContextObject = { 'term-query/query': { ...query, parent, taxonomy } };
 
 	// There are some effects running where some initialization logic is
 	// happening and setting some values to some attributes (ex. queryId).
@@ -88,9 +86,12 @@ export default function QueryContent( props ) {
 		const newQuery = {};
 		let newInherit = inherit;
 		// Update inherit if context is available.
-		if ( taxonomyContext && ! inherit ) {
-			newQuery.inherit = true;
+		if ( queryContext && ! inherit ) {
 			newInherit = true;
+			newQuery.inherit = true;
+			// Remove taxonomy and parent if inherited.
+			newQuery.taxonomy = undefined;
+			newQuery.parent = undefined;
 		}
 		// When we inherit from global query always need to set the `perPage`
 		// based on the reading settings.
@@ -103,7 +104,7 @@ export default function QueryContent( props ) {
 			__unstableMarkNextChangeAsNotPersistent();
 			updateQuery( newQuery );
 		}
-	}, [ query.perPage, postsPerPage, inherit, taxonomyContext ] );
+	}, [ query.perPage, postsPerPage, inherit, queryContext ] );
 	// We need this for multi-query block pagination.
 	// Query parameters for each block are scoped to their ID.
 	useEffect( () => {
@@ -138,8 +139,7 @@ export default function QueryContent( props ) {
 				attributes={
 					{
 						...attributes,
-						query: { ...query, parent }, // Maybe override parent with inherited value.
-						taxonomy, // Maybe override taxonomy with inherited value.
+						query: { ...query, parent, taxonomy }, // Maybe override parent & taxonomy with inherited value.
 					}
 				}
 			/>
@@ -170,7 +170,7 @@ export default function QueryContent( props ) {
 				/>
 			</InspectorControls>
 			<BlockContextProvider
-				value={ taxonomyContextObject }
+				value={ termQueryContextObject }
 			>
 				<TagName { ...innerBlocksProps } />
 			</BlockContextProvider>

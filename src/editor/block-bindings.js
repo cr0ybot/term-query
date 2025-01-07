@@ -25,13 +25,13 @@ const TERM_KEYS = [
  */
 registerBlockBindingsSource( {
 	'name': 'term-query/term',
-	usesContext: [ 'term-query/termId', 'term-query/taxonomy' ],
+	usesContext: [ 'term-query/termId', 'term-query/query' ],
 	getValues( { select, context, bindings } ) {
 		const values = {};
 
 		// Get the term id & taxonomy from the context.
-		const termId = context[ 'term-query/termId' ];
-		const taxonomy = context[ 'term-query/taxonomy' ];
+		const termId = context['term-query/termId'];
+		const taxonomy = context['term-query/query']['taxonomy'];
 
 		// Get the term object from the store.
 		const term = select( coreDataStore ).getEntityRecord( 'taxonomy', taxonomy, termId );
@@ -54,8 +54,8 @@ registerBlockBindingsSource( {
 	},
 	getFieldsList( { select, context } ) {
 		// Get the term id & taxonomy from the context.
-		const termId = context[ 'term-query/termId' ];
-		const taxonomy = context[ 'term-query/taxonomy' ];
+		const termId = context['term-query/termId'];
+		const taxonomy = context['term-query/query']['taxonomy'];
 
 		// Get the term object from the store.
 		const term = select( coreDataStore ).getEntityRecord( 'taxonomy', taxonomy, termId );
@@ -80,13 +80,13 @@ registerBlockBindingsSource( {
  */
 registerBlockBindingsSource( {
 	'name': 'term-query/term-meta',
-	usesContext: [ 'term-query/termId', 'term-query/taxonomy' ],
+	usesContext: [ 'term-query/termId', 'term-query/query' ],
 	getValues( { select, context, bindings } ) {
 		const values = {};
 
 		// Get the term id & taxonomy from the context.
-		const termId = context[ 'term-query/termId' ];
-		const taxonomy = context[ 'term-query/taxonomy' ];
+		const termId = context['term-query/termId'];
+		const taxonomy = context['term-query/query']['taxonomy'];
 
 		// Get the term object from the store.
 		const term = select( coreDataStore ).getEntityRecord( 'taxonomy', taxonomy, termId );
@@ -135,8 +135,8 @@ registerBlockBindingsSource( {
 	},
 	getFieldsList( { select, context } ) {
 		// Get the term id & taxonomy from the context.
-		const termId = context[ 'term-query/termId' ];
-		const taxonomy = context[ 'term-query/taxonomy' ];
+		const termId = context['term-query/termId'];
+		const taxonomy = context['term-query/query']['taxonomy'];
 
 		// Get the term object from the store.
 		const term = select( coreDataStore ).getEntityRecord( 'taxonomy', taxonomy, termId );

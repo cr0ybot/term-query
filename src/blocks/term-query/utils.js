@@ -150,8 +150,8 @@ export function isControlAllowed( allowedControls, key ) {
 /**
  * Clones a pattern's blocks and then recurses over that list of blocks,
  * transforming them to retain some `query` attribute properties.
- * For now we retain the `parent` and `inherit` properties as they are
- * fundamental for the expected functionality of the block and don't affect
+ * For now we retain the `taxonomy`, `parent`, and `inherit` properties as they
+ * are fundamental for the expected functionality of the block and don't affect
  * its design and presentation.
  *
  * Returns the cloned/transformed blocks and array of existing Query Loop
@@ -176,6 +176,7 @@ export const getTransformedBlocksFromPattern = (
 		if ( block.name === 'cr0ybot/term-query' ) {
 			block.attributes.query = {
 				...block.attributes.query,
+				taxonomy,
 				parent,
 				inherit,
 			};

@@ -16,6 +16,7 @@ if ( ! function_exists( 'ctq_build_query_vars_from_term_query_block' ) ) {
 	 *
 	 * @param WP_Block $block The block object.
 	 * @param int      $page The current page.
+	 * @param array    $args Additional query args.
 	 */
 	function ctq_build_query_vars_from_term_query_block( $block, $page, $args = array() ) {
 		$query_args = array(
@@ -24,9 +25,8 @@ if ( ! function_exists( 'ctq_build_query_vars_from_term_query_block' ) ) {
 
 		if ( isset( $block->context['term-query/query'] ) ) {
 			$context_query = $block->context['term-query/query'];
-			$taxonomy      = $block->context['term-query/taxonomy'];
 
-			$query_args['taxonomy']   = $taxonomy;
+			$query_args['taxonomy']   = $context_query['taxonomy'];
 			$query_args['offset']     = ( $page - 1 ) * $context_query['perPage'];
 			$query_args['number']     = $context_query['perPage'];
 			$query_args['orderby']    = $context_query['orderBy'];
@@ -52,6 +52,7 @@ $page = empty( $_GET[ $page_key ] ) ? 1 : (int) $_GET[ $page_key ];
 $use_global_query = ( isset( $block->context['term-query/query']['inherit'] ) && $block->context['term-query/query']['inherit'] );
 if ( $use_global_query ) {
 	if ( isset( $block->context['term-query/termId'] ) ) {
+		error_log( 'Using termId from context:', $block->context['term-query/termId'] );
 		// If termId is already provided in context, use that as parent.
 		$term_id    = $block->context['term-query/termId'];
 		$query_args = ctq_build_query_vars_from_term_query_block(
@@ -67,6 +68,7 @@ if ( $use_global_query ) {
 		global $wp_query;
 
 		$context_query = $block->context['term-query/query'];
+		error_log( 'No termId in context, using query from context:', print_r( $context_query, true ) );
 
 		if ( ! in_the_loop() && ( is_category() || is_tag() || is_tax() ) ) {
 			/**
@@ -79,24 +81,30 @@ if ( $use_global_query ) {
 			 */
 			$terms = get_terms(
 				array(
-					'taxonomy'   => $block->context['term-query/taxonomy'],
+					'taxonomy'   => $context_query['taxonomy'],
 					'parent'     => $wp_query->get_queried_object_id(),
 					'hide_empty' => $context_query['hideEmpty'],
 				)
 			);
+			error_log( 'Got terms from queried object:', $wp_query->get_queried_object_id() );
 		} elseif ( is_single() || in_the_loop() ) {
 			/**
 			 * If the global query is for a single post or we're in the main loop,
 			 * get the terms from the post.
 			 */
-			$terms = get_the_terms( get_the_ID(), $block->context['term-query/taxonomy'] );
-		} else {
+			$terms = get_the_terms( get_the_ID(), $context_query['taxonomy'] );
+			error_log( 'Got terms from post:', get_the_ID() );
+		} elseif ( isset( $block->context['postId'] ) ) {
 			/**
 			 * Otherwise, get the postID from context.
 			 */
 			// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 			$post_id = $block->context['postId'];
-			$terms   = get_the_terms( $post_id, $block->context['term-query/taxonomy'] );
+			$terms   = get_the_terms( $post_id, $context_query['taxonomy'] );
+			error_log( 'Got terms from postId context:', $post_id );
+		} else {
+			error_log( 'No terms found in context.' );
+			$terms = array();
 		}
 	}
 } else {
@@ -138,10 +146,8 @@ foreach ( $terms as $term ) {
 	$block_instance['blockName'] = 'core/null';
 
 	$term_id              = $term->term_id;
-	$taxonomy             = $term->taxonomy; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-	$filter_block_context = static function ( $context ) use ( $term_id, $taxonomy ) {
-		$context['term-query/taxonomy'] = $taxonomy;
-		$context['term-query/termId']   = $term_id;
+	$filter_block_context = static function ( $context ) use ( $term_id ) {
+		$context['term-query/termId'] = $term_id;
 		return $context;
 	};
 

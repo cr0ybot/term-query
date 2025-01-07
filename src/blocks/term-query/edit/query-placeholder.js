@@ -23,7 +23,8 @@ import { useScopedBlockVariations, useTaxonomies } from '../utils';
 import { useBlockPatterns } from './pattern-selection';
 
 function TaxonomyPicker({ attributes, setAttributes }) {
-	const { taxonomy } = attributes;
+	const { query } = attributes;
+	const { taxonomy } = query;
 	const [ selectedTaxonomy, setSelectedTaxonomy ] = useState( taxonomy );
 	const taxonomies = useTaxonomies();
 
@@ -31,7 +32,7 @@ function TaxonomyPicker({ attributes, setAttributes }) {
 		event.preventDefault();
 
 		if ( selectedTaxonomy ) {
-			setAttributes( { taxonomy: selectedTaxonomy } );
+			setAttributes( { query: { ...query, taxonomy: selectedTaxonomy } } );
 		}
 	};
 
@@ -150,14 +151,17 @@ function QueryVariationPicker( { clientId, attributes, openPatternSelectionModal
 
 export default function QueryPlaceholder( {
 	attributes,
+	context,
 	clientId,
 	name,
 	setAttributes,
 	openPatternSelectionModal,
 } ) {
+	const { query } = attributes;
 	const {
-		taxonomy,
-	} = attributes;
+		'term-query/query': queryContext,
+	} = context;
+	const taxonomy = queryContext?.taxonomy || query?.taxonomy;
 	const [ isStartingBlank, setIsStartingBlank ] = useState( false );
 	const blockProps = useBlockProps();
 	const { blockType, activeBlockVariation } = useSelect(

@@ -28,11 +28,11 @@ export default function QueryInspectorControls( props ) {
 		props;
 	const {
 		query,
-		taxonomy,
 		stickyTerms,
 		displayLayout,
 	} = attributes;
 	const {
+		taxonomy,
 		order,
 		orderBy,
 		parent,
@@ -43,7 +43,8 @@ export default function QueryInspectorControls( props ) {
 	const taxonomies = useTaxonomies();
 
 	const updateTaxonomy = ( value ) => {
-		setAttributes( { taxonomy: value, stickyTerms: [] } );
+		setQuery( { taxonomy: value } );
+		setAttributes( { stickyTerms: [] } );
 	};
 
 	const showInheritControl = isControlAllowed( allowedControls, 'inherit' );

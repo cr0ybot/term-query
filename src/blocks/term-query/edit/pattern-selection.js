@@ -51,13 +51,13 @@ export default function PatternSelection( {
 	const blockPatterns = useBlockPatterns( clientId, attributes );
 	/*
 	 * When we preview Query Loop blocks we should prefer the current
-	 * block's postType, which is passed through block context.
+	 * block's taxonomy, which is passed through block context.
 	 */
 	const blockPreviewContext = useMemo(
 		() => ( {
-			previewPostType: attributes.query.postType,
+			previewTaxonomy: attributes.query.taxonomy,
 		} ),
-		[ attributes.query.postType ]
+		[ attributes.query.taxonomy ]
 	);
 	const filteredBlockPatterns = useMemo( () => {
 		return searchPatterns( blockPatterns, searchValue );

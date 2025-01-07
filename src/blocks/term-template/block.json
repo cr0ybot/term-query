@@ -8,16 +8,15 @@
 		"cr0ybot/term-query"
 	],
 	"description": "Contains the block elements used to render a taxonomy term, like the title, description, and more.",
-	"textdomain": "default",
+	"textdomain": "term-query",
 	"usesContext": [
 		"term-query/queryId",
 		"term-query/query",
-		"term-query/taxonomy",
 		"term-query/termId",
 		"term-query/stickyTerms",
 		"term-query/displayLayout",
+		"term-query/previewTaxonomy",
 		"templateSlug",
-		"previewPostType",
 		"postId"
 	],
 	"supports": {

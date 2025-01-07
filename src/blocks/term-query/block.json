@@ -11,7 +11,7 @@
 		"query",
 		"loop"
 	],
-	"textdomain": "cr0ybot",
+	"textdomain": "term-query",
 	"attributes": {
 		"queryId": {
 			"type": "number"
@@ -19,6 +19,7 @@
 		"query": {
 			"type": "object",
 			"default": {
+				"taxonomy": "",
 				"perPage": 100,
 				"pages": 0,
 				"offset": 0,
@@ -31,9 +32,6 @@
 				"parent": 0
 			}
 		},
-		"taxonomy": {
-			"type": "string"
-		},
 		"stickyTerms": {
 			"type": "array",
 			"default": []
@@ -44,18 +42,20 @@
 		},
 		"namespace": {
 			"type": "string"
+		},
+		"previewTaxonomy": {
+			"type": "string"
 		}
 	},
 	"providesContext": {
 		"term-query/queryId": "queryId",
-		"term-query/query": "query",
 		"term-query/stickyTerms": "stickyTerms",
-		"term-query/displayLayout": "displayLayout"
+		"term-query/displayLayout": "displayLayout",
+		"term-query/previewTaxonomy": "previewTaxonomy"
 	},
 	"usesContext": [
 		"term-query/queryId",
 		"term-query/query",
-		"term-query/taxonomy",
 		"term-query/termId"
 	],
 	"supports": {

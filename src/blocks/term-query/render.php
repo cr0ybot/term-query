@@ -2,7 +2,7 @@
 /**
  * Block: term-query, render.
  *
- * This is mainly here to handle adding the taxonomy to the block context.
+ * This is mainly here to handle adding the query to the block context.
  *
  * @param array    $attributes The block attributes.
  * @param string   $content    The block content.
@@ -11,11 +11,13 @@
  * @package term-query
  */
 
-if ( $attributes['taxonomy'] ) {
-	// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-	$taxonomy             = $attributes['taxonomy'];
-	$filter_block_context = static function ( $context ) use ( $taxonomy ) {
-		$context['term-query/taxonomy'] = $taxonomy;
+// Check the parsed block for an empty query attribute to bypass the defaults.
+$inherit = ! isset( $block->parsed_block['attrs']['query'] ) || $attributes['query']['inherit'] ?? isset( $context['term-query/query'] );
+
+if ( ! $inherit ) {
+	$query_context        = $attributes['query'];
+	$filter_block_context = static function ( $context ) use ( $query_context ) {
+		$context['term-query/query'] = $query_context;
 		return $context;
 	};
 
