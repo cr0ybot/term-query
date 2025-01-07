@@ -67,7 +67,7 @@ function get_term_value( array $source_args, WP_Block $block_instance, string $a
 	}
 
 	$term = get_term( $term_id );
-	if ( ! $term ) {
+	if ( ! $term || is_wp_error( $term ) ) {
 		return null;
 	}
 
