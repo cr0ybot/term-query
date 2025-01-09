@@ -24,7 +24,7 @@ import {
 } from '../../utils';
 
 export default function QueryInspectorControls( props ) {
-	const { attributes, setQuery, setDisplayLayout, setAttributes } =
+	const { attributes, setQuery, setDisplayLayout, setAttributes, context } =
 		props;
 	const {
 		query,
@@ -37,8 +37,11 @@ export default function QueryInspectorControls( props ) {
 		orderBy,
 		parent,
 		hideEmpty,
-		inherit,
+		inherit = false,
 	} = query;
+	const {
+		'term-query/termId': termId,
+	} = context;
 	const allowedControls = useAllowedControls( attributes );
 	const taxonomies = useTaxonomies();
 
@@ -47,7 +50,10 @@ export default function QueryInspectorControls( props ) {
 		setAttributes( { stickyTerms: [] } );
 	};
 
-	const showInheritControl = isControlAllowed( allowedControls, 'inherit' );
+	const isNested = !! termId;
+	const isNestedOrInherited = isNested || inherit;
+
+	const showInheritControl = ! isNested && isControlAllowed( allowedControls, 'inherit' );
 	const showTaxControl =
 		!! taxonomies?.length &&
 		isControlAllowed( allowedControls, 'taxonomy' );
@@ -56,10 +62,11 @@ export default function QueryInspectorControls( props ) {
 	const showOrderControl =
 		! inherit && isControlAllowed( allowedControls, 'order' );
 	const showStickyTermsControl =
-		! inherit &&
+		! isNestedOrInherited &&
 		showTaxControl &&
 		isControlAllowed( allowedControls, 'stickyTerms' );
 	const showSettingsPanel =
+		isNested || // If nested, show to display inherited settings.
 		showInheritControl ||
 		showColumnsControl ||
 		showOrderControl ||
@@ -94,6 +101,14 @@ export default function QueryInspectorControls( props ) {
 								}
 							/>
 						) }
+						{ isNested && (
+							<p className="description">
+								{ __(
+									'This block is nested inside another term query block, so the taxonomy and parent term are inherited.',
+									'term-query'
+								) }
+							</p>
+						)}
 						<Flex
 							align="stretch"
 							direction="column"

@@ -19,23 +19,28 @@ if ( ! function_exists( 'ctq_build_query_vars_from_term_query_block' ) ) {
 	 * @param array    $args Additional query args.
 	 */
 	function ctq_build_query_vars_from_term_query_block( $block, $page, $args = array() ) {
+		if ( ! isset( $block->context['term-query/query'] ) ) {
+			error_log( 'No query found in context.' );
+			return null;
+		}
+
 		$query_args = array(
 			'offset' => 0,
 		);
 
-		if ( isset( $block->context['term-query/query'] ) ) {
-			$context_query = $block->context['term-query/query'];
+		$context_query = $block->context['term-query/query'];
 
-			$query_args['taxonomy']   = $context_query['taxonomy'];
-			$query_args['offset']     = ( $page - 1 ) * $context_query['perPage'];
-			$query_args['number']     = $context_query['perPage'];
-			$query_args['orderby']    = $context_query['orderBy'];
-			$query_args['order']      = $context_query['order'];
-			$query_args['hide_empty'] = $context_query['hideEmpty'];
-			$query_args['include']    = $context_query['include'];
-			$query_args['exclude']    = $context_query['exclude'];
-			$query_args['parent']     = $context_query['parent'];
-		}
+		$per_page = $context_query['perPage'] ?? 100;
+
+		$query_args['taxonomy']   = $context_query['taxonomy'];
+		$query_args['offset']     = ( $page - 1 ) * $per_page;
+		$query_args['number']     = $per_page;
+		$query_args['orderby']    = $context_query['orderBy'] ?? 'name';
+		$query_args['order']      = $context_query['order'] ?? 'ASC';
+		$query_args['hide_empty'] = $context_query['hideEmpty'] ?? false;
+		$query_args['include']    = $context_query['include'];
+		$query_args['exclude']    = $context_query['exclude'];
+		$query_args['parent']     = $context_query['parent'];
 
 		// Merge with additional args.
 		$query_args = array_merge( $query_args, $args );
@@ -48,23 +53,29 @@ $page_key = isset( $block->context['term-query/queryId'] ) ? 'query-' . $block->
 // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited, WordPress.Security.NonceVerification.Recommended
 $page = empty( $_GET[ $page_key ] ) ? 1 : (int) $_GET[ $page_key ];
 
-// Use global query if needed.
-$use_global_query = ( isset( $block->context['term-query/query']['inherit'] ) && $block->context['term-query/query']['inherit'] );
-if ( $use_global_query ) {
-	if ( isset( $block->context['term-query/termId'] ) ) {
-		error_log( 'Using termId from context:', $block->context['term-query/termId'] );
-		// If termId is already provided in context, use that as parent.
-		$term_id    = $block->context['term-query/termId'];
-		$query_args = ctq_build_query_vars_from_term_query_block(
-			$block,
-			$page,
-			array(
-				'parent' => $term_id,
-			),
-		);
-		$query      = new WP_Term_Query( $query_args );
-		$terms      = $query->get_terms();
-	} else {
+// If termId is provided in context, this is a nested term query block and we should use that as the parent.
+if ( isset( $block->context['term-query/termId'] ) ) {
+	error_log( 'Using termId from context:', $block->context['term-query/termId'] );
+	// If termId is already provided in context, use that as parent.
+	$term_id    = $block->context['term-query/termId'];
+	$query_args = ctq_build_query_vars_from_term_query_block(
+		$block,
+		$page,
+		array(
+			'parent' => $term_id,
+		),
+	);
+	if ( empty( $query_args ) ) {
+		return '';
+	}
+	$query = new WP_Term_Query( $query_args );
+	$terms = $query->get_terms();
+} else {
+	// Use global query if needed.
+	$use_global_query = ( isset( $block->context['term-query/query']['inherit'] ) && $block->context['term-query/query']['inherit'] );
+	if ( $use_global_query ) {
+		error_log( 'Inheriting query from context.' );
+
 		global $wp_query;
 
 		$context_query = $block->context['term-query/query'];
@@ -106,11 +117,14 @@ if ( $use_global_query ) {
 			error_log( 'No terms found in context.' );
 			$terms = array();
 		}
+	} else {
+		$query_args = ctq_build_query_vars_from_term_query_block( $block, $page );
+		if ( empty( $query_args ) ) {
+			return '';
+		}
+		$query = new WP_Term_Query( $query_args );
+		$terms = $query->get_terms();
 	}
-} else {
-	$query_args = ctq_build_query_vars_from_term_query_block( $block, $page );
-	$query      = new WP_Term_Query( $query_args );
-	$terms      = $query->get_terms();
 }
 
 if ( empty( $terms ) ) {
