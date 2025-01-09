@@ -79,7 +79,10 @@ function get_term_value( array $source_args, WP_Block $block_instance, string $a
 
 	// Additional keys that require special handling.
 	return match ( $source_args['key'] ) {
-		'link' => get_term_link( $term ),
+		// get_term_link will fail if the taxonomy doesn't exist.
+		'link' => taxonomy_exists( $term->taxonomy )
+			? get_term_link( $term )
+			: null,
 		default => null,
 	};
 }

@@ -33,6 +33,10 @@ registerBlockBindingsSource( {
 		const termId = context['term-query/termId'];
 		const taxonomy = context['term-query/query']['taxonomy'];
 
+		if ( ! termId || ! taxonomy ) {
+			return values;
+		}
+
 		// Get the term object from the store.
 		const term = select( coreDataStore ).getEntityRecord( 'taxonomy', taxonomy, termId );
 		if ( ! term ) {
@@ -57,10 +61,14 @@ registerBlockBindingsSource( {
 		const termId = context['term-query/termId'];
 		const taxonomy = context['term-query/query']['taxonomy'];
 
+		if ( ! termId || ! taxonomy ) {
+			return {};
+		}
+
 		// Get the term object from the store.
 		const term = select( coreDataStore ).getEntityRecord( 'taxonomy', taxonomy, termId );
 		if ( ! term ) {
-			return [];
+			return {};
 		}
 
 		// Return only the keys that are present in the term object.
@@ -87,6 +95,10 @@ registerBlockBindingsSource( {
 		// Get the term id & taxonomy from the context.
 		const termId = context['term-query/termId'];
 		const taxonomy = context['term-query/query']['taxonomy'];
+
+		if ( ! termId || ! taxonomy ) {
+			return values;
+		}
 
 		// Get the term object from the store.
 		const term = select( coreDataStore ).getEntityRecord( 'taxonomy', taxonomy, termId );
@@ -138,10 +150,14 @@ registerBlockBindingsSource( {
 		const termId = context['term-query/termId'];
 		const taxonomy = context['term-query/query']['taxonomy'];
 
+		if ( ! termId || ! taxonomy ) {
+			return {};
+		}
+
 		// Get the term object from the store.
 		const term = select( coreDataStore ).getEntityRecord( 'taxonomy', taxonomy, termId );
 		if ( ! term ) {
-			return [];
+			return {};
 		}
 
 		const { meta } = term;
