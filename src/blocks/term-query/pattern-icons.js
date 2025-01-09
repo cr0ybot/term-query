@@ -1,5 +1,11 @@
 import { Path, SVG } from '@wordpress/components';
 
+export const link = (
+	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+		<Path d="m 13,23 h 22 v 3 H 13 Z" />
+	</SVG>
+);
+
 export const titleLink = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
 		<Path d="m 7,24 h 18 v 3 H 7 Z M 41,20 H 7 v 2 h 34 z" />

@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
 import {
+	link,
 	titleLink,
 	titleDescriptionLink,
 	imageTitleLink,
@@ -8,6 +9,40 @@ import {
 } from './pattern-icons';
 
 const variations = [
+	{
+		name: 'term-query/link',
+		title: __( 'Link', 'term-query' ),
+		icon: link,
+		attributes: {},
+		innerBlocks: [
+			[
+				'cr0ybot/term-template',
+				{},
+				[
+					[ 'core/buttons', {}, [
+						[ 'core/button', {
+							metadata: {
+								bindings: {
+									url: {
+										source: 'term-query/term',
+										args: {
+											'key': 'link',
+										},
+									},
+									text: {
+										source: 'term-query/term',
+										args: {
+											'key': 'name',
+										},
+									}
+								},
+							},
+						} ],
+					] ],
+				],
+			],
+		],
+	},
 	{
 		name: 'term-query/title-link',
 		title: __( 'Title & Link', 'term-query' ),
