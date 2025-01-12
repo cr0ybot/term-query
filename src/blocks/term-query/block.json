@@ -5,7 +5,13 @@
 	"title": "Term Query Loop",
 	"category": "theme",
 	"description": "An advanced block that allows displaying taxonomy terms based on different query parameters and visual configurations.",
-	"textdomain": "cr0ybot",
+	"keywords": [
+		"taxonomy",
+		"term",
+		"query",
+		"loop"
+	],
+	"textdomain": "term-query",
 	"attributes": {
 		"queryId": {
 			"type": "number"
@@ -13,6 +19,7 @@
 		"query": {
 			"type": "object",
 			"default": {
+				"taxonomy": "",
 				"perPage": 100,
 				"pages": 0,
 				"offset": 0,
@@ -25,9 +32,6 @@
 				"parent": 0
 			}
 		},
-		"taxonomy": {
-			"type": "string"
-		},
 		"stickyTerms": {
 			"type": "array",
 			"default": []
@@ -38,18 +42,20 @@
 		},
 		"namespace": {
 			"type": "string"
+		},
+		"previewTaxonomy": {
+			"type": "string"
 		}
 	},
 	"providesContext": {
 		"term-query/queryId": "queryId",
-		"term-query/query": "query",
 		"term-query/stickyTerms": "stickyTerms",
-		"term-query/displayLayout": "displayLayout"
+		"term-query/displayLayout": "displayLayout",
+		"term-query/previewTaxonomy": "previewTaxonomy"
 	},
 	"usesContext": [
 		"term-query/queryId",
 		"term-query/query",
-		"term-query/taxonomy",
 		"term-query/termId"
 	],
 	"supports": {

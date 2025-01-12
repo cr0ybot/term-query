@@ -25,26 +25,6 @@ import { getQueryContextFromTemplate } from './utils';
 import withTermQueryProvider from '../../queries/withTermQueryProvider';
 
 const TEMPLATE = [
-	[ 'core/image', {
-		metadata: {
-			bindings: {
-				url: {
-					source: 'term-query/term-meta',
-					args: {
-						'key': 'thumbnail_id',
-						'transform': 'attachment_id_to_url',
-					},
-				},
-				alt: {
-					source: 'term-query/term-meta',
-					args: {
-						'key': 'thumbnail_id',
-						'transform': 'attachment_id_to_image_alt',
-					},
-				},
-			},
-		},
-	} ],
 	[ 'core/heading', {
 		metadata: {
 			bindings: {
@@ -136,6 +116,7 @@ function TermTemplateEdit( {
 	clientId,
 	context: {
 		'term-query/query': {
+			taxonomy,
 			perPage,
 			offset = 0,
 			order,
@@ -153,11 +134,10 @@ function TermTemplateEdit( {
 			// REST API or be handled by custom REST filters like `rest_{$this->post_type}_query`.
 			...restQueryArgs
 		} = {},
-		'term-query/taxonomy': taxonomy,
 		'term-query/termId': termId,
 		'term-query/stickyTerms': stickyTerms,
+		'term-query/previewTaxonomy': previewTaxonomy,
 		templateSlug,
-		previewPostType,
 		postId,
 	},
 	attributes: { layout },
@@ -229,12 +209,16 @@ function TermTemplateEdit( {
 				}
 			}
 
+			// When we preview Term Query Loop blocks we should prefer the current
+			// block's taxonomy, which is passed through block context.
+			const usedTaxonomy = previewTaxonomy || taxonomy;
+
 			const termsLoading = select('core/data').isResolving(
 				'core',
 				'getEntityRecords',
 				[
 					'taxonomy',
-					taxonomy,
+					usedTaxonomy,
 					{
 						...query,
 						...restQueryArgs,
@@ -245,7 +229,7 @@ function TermTemplateEdit( {
 			return {
 				terms: [
 					...(fetchedStickyTerms ?? []),
-					...(getEntityRecords( 'taxonomy', taxonomy, {
+					...(getEntityRecords( 'taxonomy', usedTaxonomy, {
 						...query,
 						...restQueryArgs,
 					} ) ?? []),
@@ -268,13 +252,12 @@ function TermTemplateEdit( {
 			inherit,
 			templateSlug,
 			restQueryArgs,
-			previewPostType,
+			previewTaxonomy,
 		]
 	);
 	const blockContexts = useMemo(
 		() =>
 			terms?.map( ( term ) => ( {
-				'term-query/taxonomy': term.taxonomy,
 				'term-query/termId': term.id,
 				classList: term.class_list ?? '',
 			} ) ),

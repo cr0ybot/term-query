@@ -10,5 +10,7 @@
 		<!-- Exclude WordPress class file name conventions -->
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+		<!-- Not needed, Yoda conditions are -->
+		<exclude name="WordPress.PHP.YodaConditions.NotYoda" />
 	</rule>
 </ruleset>

@@ -14,6 +14,9 @@ import OrderControl from './order-control';
 import ParentControl from './parent-control';
 import TaxonomyControl from './taxonomy-control';
 import StickyTermsControl from './sticky-terms-control';
+import PerPageControl from './per-page-control';
+import OffsetControl from './offset-control';
+import PagesControl from './pages-control';
 import {
 	useAllowedControls,
 	isControlAllowed,
@@ -21,29 +24,36 @@ import {
 } from '../../utils';
 
 export default function QueryInspectorControls( props ) {
-	const { attributes, setQuery, setDisplayLayout, setAttributes } =
+	const { attributes, setQuery, setDisplayLayout, setAttributes, context } =
 		props;
 	const {
 		query,
-		taxonomy,
 		stickyTerms,
 		displayLayout,
 	} = attributes;
 	const {
+		taxonomy,
 		order,
 		orderBy,
 		parent,
 		hideEmpty,
-		inherit,
+		inherit = false,
 	} = query;
+	const {
+		'term-query/termId': termId,
+	} = context;
 	const allowedControls = useAllowedControls( attributes );
 	const taxonomies = useTaxonomies();
 
 	const updateTaxonomy = ( value ) => {
-		setAttributes( { taxonomy: value, stickyTerms: [] } );
+		setQuery( { taxonomy: value } );
+		setAttributes( { stickyTerms: [] } );
 	};
 
-	const showInheritControl = isControlAllowed( allowedControls, 'inherit' );
+	const isNested = !! termId;
+	const isNestedOrInherited = isNested || inherit;
+
+	const showInheritControl = ! isNested && isControlAllowed( allowedControls, 'inherit' );
 	const showTaxControl =
 		!! taxonomies?.length &&
 		isControlAllowed( allowedControls, 'taxonomy' );
@@ -52,10 +62,11 @@ export default function QueryInspectorControls( props ) {
 	const showOrderControl =
 		! inherit && isControlAllowed( allowedControls, 'order' );
 	const showStickyTermsControl =
-		! inherit &&
+		! isNestedOrInherited &&
 		showTaxControl &&
 		isControlAllowed( allowedControls, 'stickyTerms' );
 	const showSettingsPanel =
+		isNested || // If nested, show to display inherited settings.
 		showInheritControl ||
 		showColumnsControl ||
 		showOrderControl ||
@@ -63,6 +74,13 @@ export default function QueryInspectorControls( props ) {
 	const showHideEmptyControl =
 		showTaxControl &&
 		isControlAllowed( allowedControls, 'hideEmpty' );
+
+	const showPerPageControl = isControlAllowed( allowedControls, 'perPage' );
+	const showOffSetControl = isControlAllowed( allowedControls, 'offset' );
+	const showPagesControl = isControlAllowed( allowedControls, 'pages' );
+
+	const showDisplayPanel =
+		showPerPageControl || showOffSetControl || showPagesControl;
 
 	return (
 		<>
@@ -83,6 +101,14 @@ export default function QueryInspectorControls( props ) {
 								}
 							/>
 						) }
+						{ isNested && (
+							<p className="description">
+								{ __(
+									'This block is nested inside another term query block, so the taxonomy and parent term are inherited.',
+									'term-query'
+								) }
+							</p>
+						)}
 						<Flex
 							align="stretch"
 							direction="column"
@@ -158,6 +184,28 @@ export default function QueryInspectorControls( props ) {
 							) }
 						</Flex>
 					</PanelBody>
+					{ ! inherit && showDisplayPanel && (
+						<PanelBody title={ __( 'Display' ) }>
+							{ showPerPageControl && (
+								<PerPageControl
+									perPage={ query.perPage }
+									onChange={ setQuery }
+								/>
+							) }
+							{ showOffSetControl && (
+								<OffsetControl
+									offset={ query.offset }
+									onChange={ setQuery }
+								/>
+							) }
+							{ showPagesControl && (
+								<PagesControl
+									pages={ query.pages }
+									onChange={ setQuery }
+								/>
+							) }
+						</PanelBody>
+					) }
 				</InspectorControls>
 			) }
 		</>
