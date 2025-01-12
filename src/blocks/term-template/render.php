@@ -43,7 +43,30 @@ if ( ! function_exists( 'ctq_build_query_vars_from_term_query_block' ) ) {
 		// Merge with additional args.
 		$query_args = array_merge( $query_args, $args );
 
-		return $query_args;
+		/**
+		 * Filters the arguments which will be passet to `WP_Term_Query` for the
+		 * Term Query Loop Block.
+		 *
+		 * Anything that is returned from this filter should be compatible with
+		 * the `WP_Term_Query` API to form the query context which will be
+		 * passed down to the block's children. This can help, for example, to
+		 * include additional settings or meta queries not directly supported by
+		 * the block's settings, and extend its capabilities.
+		 *
+		 * Please note that this will only influence the query that will be
+		 * rendered on the front end. The editor preview is not affected by this
+		 * filter. Also, it is worth noting that the editor preview uses the
+		 * REST API, so, ideally, one should aim to provide attributes which are
+		 * also compatible with the REST API in order to be able to implement
+		 * identical queries on both sides.
+		 *
+		 * @since 0.7.0
+		 *
+		 * @param array   $query_args Array containing arguments for `WP_Term_Query` as parsed by the block context.
+		 * @param WP_Block $block The block instance.
+		 * @param int      $page The current query's page.
+		 */
+		return apply_filters( 'term_query_loop_block_query_vars', $query_args, $block, $page );
 	}
 }
 
