@@ -118,7 +118,6 @@ function TermTemplateEdit( {
 		'term-query/query': {
 			taxonomy,
 			perPage,
-			offset = 0,
 			order,
 			orderBy,
 			include,
@@ -151,7 +150,6 @@ function TermTemplateEdit( {
 			const { getBlocks } = select( blockEditorStore );
 
 			const query = {
-				//offset: offset || 0,
 				order,
 				orderby: orderBy,
 				parent,
@@ -241,7 +239,6 @@ function TermTemplateEdit( {
 		[
 			taxonomy,
 			perPage,
-			offset,
 			order,
 			orderBy,
 			clientId,

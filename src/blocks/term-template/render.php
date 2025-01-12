@@ -24,16 +24,14 @@ if ( ! function_exists( 'ctq_build_query_vars_from_term_query_block' ) ) {
 			return null;
 		}
 
-		$query_args = array(
-			'offset' => 0,
-		);
+		$query_args = array();
 
 		$context_query = $block->context['term-query/query'];
 
 		$per_page = $context_query['perPage'] ?? 100;
 
 		$query_args['taxonomy']   = $context_query['taxonomy'];
-		$query_args['offset']     = ( $page - 1 ) * $per_page;
+		$query_args['offset']     = ( ( $page - 1 ) * $per_page );
 		$query_args['number']     = $per_page;
 		$query_args['orderby']    = $context_query['orderBy'] ?? 'name';
 		$query_args['order']      = $context_query['order'] ?? 'ASC';
