@@ -22,7 +22,6 @@
 				"taxonomy": "",
 				"perPage": 100,
 				"pages": 0,
-				"offset": 0,
 				"order": "asc",
 				"orderBy": "name",
 				"hideEmpty": true,
