@@ -16,6 +16,7 @@ import icon from './icon';
 import edit from './edit';
 import save from './save';
 import variations from './variations';
+import deprecated from './deprecated';
 
 /**
  * Register block
@@ -25,4 +26,5 @@ registerBlockType(block, {
 	edit,
 	save,
 	variations,
+	deprecated,
 });
