@@ -15,6 +15,7 @@ import ParentControl from './parent-control';
 import TaxonomyControl from './taxonomy-control';
 import StickyTermsControl from './sticky-terms-control';
 import PerPageControl from './per-page-control';
+import OffsetControl from './offset-control';
 import PagesControl from './pages-control';
 import {
 	useAllowedControls,
@@ -75,10 +76,11 @@ export default function QueryInspectorControls( props ) {
 		isControlAllowed( allowedControls, 'hideEmpty' );
 
 	const showPerPageControl = isControlAllowed( allowedControls, 'perPage' );
+	const showOffSetControl = isControlAllowed( allowedControls, 'offset' );
 	const showPagesControl = isControlAllowed( allowedControls, 'pages' );
 
 	const showDisplayPanel =
-		showPerPageControl || showPagesControl;
+		showPerPageControl || showOffSetControl || showPagesControl;
 
 	return (
 		<>
@@ -187,6 +189,12 @@ export default function QueryInspectorControls( props ) {
 							{ showPerPageControl && (
 								<PerPageControl
 									perPage={ query.perPage }
+									onChange={ setQuery }
+								/>
+							) }
+							{ showOffSetControl && (
+								<OffsetControl
+									offset={ query.offset }
 									onChange={ setQuery }
 								/>
 							) }
