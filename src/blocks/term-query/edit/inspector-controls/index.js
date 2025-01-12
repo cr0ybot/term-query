@@ -189,25 +189,19 @@ export default function QueryInspectorControls( props ) {
 							{ showPerPageControl && (
 								<PerPageControl
 									perPage={ query.perPage }
-									onChange={ ( value ) =>
-										setQuery( { perPage: value } )
-									}
+									onChange={ setQuery }
 								/>
 							) }
 							{ showOffSetControl && (
 								<OffsetControl
 									offset={ query.offset }
-									onChange={ ( value ) =>
-										setQuery( { offset: value } )
-									}
+									onChange={ setQuery }
 								/>
 							) }
 							{ showPagesControl && (
 								<PagesControl
 									pages={ query.pages }
-									onChange={ ( value ) =>
-										setQuery( { pages: value } )
-									}
+									onChange={ setQuery }
 								/>
 							) }
 						</PanelBody>
