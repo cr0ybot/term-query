@@ -44,14 +44,17 @@ export default {
 			"type": "string"
 		}
 	},
+	isEligible( attributes ) {
+		// If the taxonomy attribute is present, we need to migrate it.
+		return !! attributes?.taxonomy;
+	},
 	migrate( attributes ) {
 		return {
-			...attributes,
+			...((({ taxonomy, ...atts }) => atts )(attributes)),
 			query: {
 				...attributes.query,
 				taxonomy: attributes.taxonomy,
 			},
-			taxonomy: undefined,
 		};
 	},
 	save( { attributes: { tagName: Tag = 'div' } } ) {
