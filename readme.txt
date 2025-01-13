@@ -132,6 +132,10 @@ addFilter( 'termQuery.termMetaTransform.prepend_octothorpe', 'me/my-plugin/prepe
 } );
 ```
 
+= How else can I extend the block? =
+
+The Term Query Loop Block has been designed to work very similarly to the core Query Loop block, and the same methods of extending that block also apply here. You can add custom block variations, register patterns, add and remove custom controls, and use filters to adjust the WP_Term_Query arguments. For more details, see the readme at https://github.com/cr0ybot/term-query/blob/main/README.md#extending-the-term-query-loop-block
+
 = What does the ‡ symbol mean? =
 
 The "double dagger" (‡) is a typographical mark generally used to indicate a footnote after both an asterisk (*) and a regular dagger (†) have been used.
