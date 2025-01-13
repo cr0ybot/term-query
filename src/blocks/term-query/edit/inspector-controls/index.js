@@ -75,7 +75,7 @@ export default function QueryInspectorControls( props ) {
 		isControlAllowed( allowedControls, 'hideEmpty' );
 
 	const showPerPageControl = isControlAllowed( allowedControls, 'perPage' );
-	const showPagesControl = isControlAllowed( allowedControls, 'pages' );
+	const showPagesControl = false; // isControlAllowed( allowedControls, 'pages' ); // Not yet supported.
 
 	const showDisplayPanel =
 		showPerPageControl || showPagesControl;
