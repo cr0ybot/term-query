@@ -26,7 +26,7 @@ function TaxonomyPicker({ attributes, setAttributes }) {
 	const { query } = attributes;
 	const { taxonomy } = query;
 	const [ selectedTaxonomy, setSelectedTaxonomy ] = useState( taxonomy );
-	const taxonomies = useTaxonomies();
+	const taxonomies = useTaxonomies( attributes );
 
 	const onSubmitTaxonomy = ( event ) => {
 		event.preventDefault();

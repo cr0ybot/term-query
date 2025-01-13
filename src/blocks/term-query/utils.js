@@ -87,11 +87,12 @@ export const mapToIHasNameAndId = ( entities, path ) => {
 };
 
 /**
- * Hook that returns all available taxonomies.
+ * Hook that returns all taxonomies available to the block.
  *
  * @return {Object[]} An array of taxonomies.
  */
-export const useTaxonomies = ( ) => {
+export const useTaxonomies = ( attributes ) => {
+	const allowedTaxonomies = useAllowedTaxonomies( attributes );
 	const taxonomies = useSelect(
 		( select ) => {
 			const { getTaxonomies } = select( coreStore );
@@ -102,7 +103,9 @@ export const useTaxonomies = ( ) => {
 		},
 		[]
 	);
-	return taxonomies;
+	return taxonomies?.filter( ( { slug } ) =>
+		isTaxonomyAllowed( allowedTaxonomies, slug )
+	);
 };
 
 /**
@@ -145,6 +148,30 @@ export function isControlAllowed( allowedControls, key ) {
 		return true;
 	}
 	return allowedControls.includes( key );
+}
+
+/**
+ * Hook that returns taxonomies allowed by the active block variation.
+ *
+ * @param {Object} attributes Block attributes.
+ * @return {string[]} An array of allowed taxonomies.
+ */
+export function useAllowedTaxonomies( attributes ) {
+	return useSelect(
+		( select ) =>
+			select( blocksStore ).getActiveBlockVariation(
+				'cr0ybot/term-query',
+				attributes
+			)?.allowedTaxonomies,
+		[ attributes ]
+	);
+}
+export function isTaxonomyAllowed( allowedTaxonomies, taxonomy ) {
+	// Every taxonomy is allowed if the list is not defined.
+	if ( ! allowedTaxonomies ) {
+		return true;
+	}
+	return allowedTaxonomies.includes( taxonomy );
 }
 
 /**

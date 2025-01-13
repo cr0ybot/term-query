@@ -42,7 +42,7 @@ export default function QueryInspectorControls( props ) {
 		'term-query/termId': termId,
 	} = context;
 	const allowedControls = useAllowedControls( attributes );
-	const taxonomies = useTaxonomies();
+	const taxonomies = useTaxonomies( attributes );
 
 	const updateTaxonomy = ( value ) => {
 		setQuery( { taxonomy: value } );
@@ -115,6 +115,7 @@ export default function QueryInspectorControls( props ) {
 						>
 							{ showTaxControl && (
 								<TaxonomyControl
+									taxonomies={ taxonomies }
 									onChange={ updateTaxonomy }
 									taxonomy={ taxonomy }
 									inherited={ inherit }
