@@ -67,11 +67,9 @@ Where possible, this plugin has been designed to follow the same extensibility p
 
 The process for registering block variations is very similar to the core Query block,[described here](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/extending-the-query-loop-block/#extending-the-block-with-variations). The primary differences are that the block to register the variations on is `cr0ybot/term-query`, all attributes will be used except for the `taxonomy`,`parent`, and `inherit` query properties when used via `scope: [ 'block' ]`, and when creating block patterns to associate with a custom variation you should add the name of your variation prefixed with the Term Query Loop block name (e.g. `cr0ybot/term-query/$variation_name`) to the pattern's `blockTypes` property.
 
-### Extending the term query
-
 ### Disabling controls
 
-The process for disabling irrelevant or unsupported controls is similar to the core Query Loop block, [described here](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/extending-the-query-loop-block/#extending-the-query). The following controls are available for this block:
+The process for disabling irrelevant or unsupported controls is similar to the core Query Loop block, using the variation's `allowedControls` property as [described here](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/extending-the-query-loop-block/#extending-the-query). The following controls are available for this block:
 
 - `inherit` - Shows the toggle switch for allowing the query to be inherited directly from the template. Hidden automatically if the block is nested.
 - `taxonomy` - Shows a dropdown of available taxonomies.
@@ -80,6 +78,10 @@ The process for disabling irrelevant or unsupported controls is similar to the c
 - `hideEmpty` - Shows a toggle switch for hiding empty terms.
 - `perPage` - Shows a number control for setting the number of terms per page.
 - `stickyTerms` - Shows a search field for adding specific terms to the top of the list.
+
+### Allowlisting taxonomies
+
+Unique to this block, the `allowedTaxonomies` property can be used to limit the taxonomies that can be selected in the block's taxonomy control. This is done by adding the taxonomy slugs to the array. If the property is not set, all taxonomies will be available. Setting the property to an empty array is not advised, as it will prevent any taxonomies from being selected.
 
 ### Adding additional controls
 
