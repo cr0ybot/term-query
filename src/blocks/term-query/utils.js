@@ -132,7 +132,7 @@ export function useAllowedControls( attributes ) {
 	return useSelect(
 		( select ) =>
 			select( blocksStore ).getActiveBlockVariation(
-				'term-query/terms',
+				'cr0ybot/term-query',
 				attributes
 			)?.allowedControls,
 
