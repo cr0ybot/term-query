@@ -66,6 +66,7 @@ export default function QueryInspectorControls( props ) {
 		isControlAllowed( allowedControls, 'stickyTerms' );
 	const showSettingsPanel =
 		isNested || // If nested, show to display inherited settings.
+		showTaxControl ||
 		showInheritControl ||
 		showColumnsControl ||
 		showOrderControl ||
