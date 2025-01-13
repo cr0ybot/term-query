@@ -3,11 +3,23 @@ import {
 	TextControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import { useEffect } from '@wordpress/element';
 
-import { useTaxonomies } from '../../utils';
+export default function TaxonomyControl( { taxonomies, onChange, taxonomy, inherited } ) {
+	/**
+	 * If the selected taxonomy is not in the list of taxonomies, clear the
+	 * selected taxonomy. This might happen if the block variation is changed.
+	 */
+	useEffect(() => {
+		if ( ! taxonomies ) {
+			return;
+		}
 
-export default function TaxonomyControl( { onChange, taxonomy, inherited } ) {
-	const taxonomies = useTaxonomies();
+		if ( ! taxonomies.some( ( { slug } ) => slug === taxonomy ) ) {
+			onChange( undefined );
+		}
+	}, [ taxonomies, taxonomy ]);
+
 	if ( ! taxonomies || taxonomies.length === 0 ) {
 		return null;
 	}
