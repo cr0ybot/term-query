@@ -89,7 +89,7 @@ Controls may be added the same way as the core Query Loop block, [described here
 
 ### Altering the query on the front end
 
-A filter is available to alter the query arguments before they are passed to the `WP_Term_Query` contructor. You can add the filter within a `pre_render_block` filter as [described here](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/extending-the-query-loop-block/#making-your-custom-query-work-on-the-front-end-side), but you should just be able to check the parsed block's namespace attribute to determine if the args should be filtered as [described in the Filters section below](#filter-term_query_loop_block_query_vars).
+The [term_query_loop_block_query_vars](#filter-term_query_loop_block_query_vars) filter is available to alter the query arguments before they are passed to the `WP_Term_Query` contructor. You can add the filter within a `pre_render_block` filter that checks for the Term Query Loop block's `namespace` attributes as [described here](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/extending-the-query-loop-block/#making-your-custom-query-work-on-the-front-end-side) to determine whether the filter should be added, as the query vars filter happens within the nested Term Template block (which does not have a namespace attribute).
 
 ### Altering the preview query in the editor
 
@@ -114,15 +114,23 @@ apply_filters( 'term_query_loop_block_query_vars', array $query_vars, WP_Block $
 #### Example
 
 ```php
+add_filter( 'pre_render_block', 'my_apply_term_query_loop_block_filters', 10, 2 );
+
+function my_apply_term_query_loop_block_filters( $pre_render, $parsed_block ) {
+	if ( 'my-plugin/my-term-query' !== $parsed_block['attrs']['namespace'] ) {
+		return $pre_render;
+	}
+
+	add_filter( 'term_query_loop_block_query_vars', 'my_term_query_loop_block_query_vars', 10, 3 );
+
+	return $pre_render;
+}
+
 add_filter( 'term_query_loop_block_query_vars', 'my_term_query_loop_block_query_vars', 10, 3 );
 
 function my_term_query_loop_block_query_vars( $query_vars, $block, $page ) {
-	// Check if we're filtering our custom block variation.
-	if ( 'my-plugin/my-term-query' !== $block->parsed_block['attrs']['namespace'] ) {
-		return $query_vars;
-	}
-
 	// Alter the $query_vars here.
+	$query_vars['orderby'] = 'name';
 
 	return $query_vars;
 }
