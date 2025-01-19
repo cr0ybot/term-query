@@ -126,11 +126,11 @@ function TermTemplateEdit( {
 			inherit,
 			pages,
 			parent = 0,
-			// We gather extra query args to pass to the REST API call.
-			// This way extenders of Query Loop can add their own query args,
+			// Gather extra query args to pass to the REST API call.
+			// This way extenders of Term Query Loop can add their own query args,
 			// and have accurate previews in the editor.
 			// Noting though that these args should either be supported by the
-			// REST API or be handled by custom REST filters like `rest_{$this->post_type}_query`.
+			// REST API or be handled by custom REST filters like `rest_{$this->taxonomy}_query`.
 			...restQueryArgs
 		} = {},
 		'term-query/termId': termId,
