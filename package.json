@@ -1,6 +1,6 @@
 {
 	"name": "term-query",
-	"version": "0.6.0",
+	"version": "0.7.0",
 	"description": "Query and display taxonomy terms as blocks.",
 	"author": {
 		"name": "Cory Hughart",
