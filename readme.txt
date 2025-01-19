@@ -2,7 +2,7 @@
 Contributors:      cr0ybot
 Tags:              block
 Tested up to:      6.7
-Stable tag:        0.6.0
+Stable tag:        0.7.0
 License:           GPL-3.0-or-later
 License URI:       (https://www.gnu.org/licenses/gpl-3.0.html)
 
@@ -151,6 +151,15 @@ WordPress does not currently have any iconography that represents the general co
 3. Inherit the "query" to display terms for the current post or child terms on a term archive.
 
 == Changelog ==
+
+= 0.7.0 =
+* Add variation and pattern picker
+* Add term_query_loop_block_query_vars filter
+* Add allowedControls setting for variations
+* Remove offset and pages control
+* Changes to how inherit setting works, only applies to top-level block to inherit from template
+* Move taxonomy attribute into query object
+* Add block deprecation to migrate attributes
 
 = 0.6.0 =
 * Add Git Updater support
