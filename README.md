@@ -39,7 +39,7 @@ Inside the Term Template block, you can add [certain blocks](#block-variations) 
 | --- | --- | --- |
 | `key` | `id`, `slug`, `name`, `description`, `count`, `link`, `parent`, `slug`, `taxonomy` | The key of the term data to display. These generally correspond to the properties returned by the taxonomy REST API endpoint. |
 
-## Term Meta: `term-query/term-meta`
+### Term Meta: `term-query/term-meta`
 
 | Argument | Possible Values | Description |
 | --- | --- | --- |
@@ -56,3 +56,82 @@ The following transformations are available in the plugin:
 - **attachment_id_to_image_alt**: Transforms an attachment ID into the alt text of the attachment.
 
 To create a custom transform, you can use the `term_query_term_meta_transform_{$transform_key}` filter in PHP for the front end and the `termQuery.termMetaTransform.{$transformKey}` filter in JavaScript for the editor. See [includes/transforms.php](/includes/transforms.php) and [src/editor/transforms.js](/src/editor/transforms.js) to reference how the built-in transforms are implemented.
+
+## Extending the Term Query Loop Block
+
+Though the Term Query Loop Block is quite versatile on its own, you can extend it further to present bespoke versions of the block with their own presets and additional or removed settings.
+
+Where possible, this plugin has been designed to follow the same extensibility patterns as the core Query Loop block, [described here](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/extending-the-query-loop-block/). There are some subtle differences that are detailed below.
+
+### Extending with block variations
+
+The process for registering block variations is very similar to the core Query block,[described here](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/extending-the-query-loop-block/#extending-the-block-with-variations). The primary differences are that the block to register the variations on is `cr0ybot/term-query`, all attributes will be used except for the `taxonomy`,`parent`, and `inherit` query properties when used via `scope: [ 'block' ]`, and when creating block patterns to associate with a custom variation you should add the name of your variation prefixed with the Term Query Loop block name (e.g. `cr0ybot/term-query/$variation_name`) to the pattern's `blockTypes` property.
+
+### Disabling controls
+
+The process for disabling irrelevant or unsupported controls is similar to the core Query Loop block, using the variation's `allowedControls` property as [described here](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/extending-the-query-loop-block/#extending-the-query). The following controls are available for this block:
+
+- `inherit` - Shows the toggle switch for allowing the query to be inherited directly from the template. Hidden automatically if the block is nested.
+- `taxonomy` - Shows a dropdown of available taxonomies.
+- `parent` - Shows a dropdown of available parent terms. Hidden automatically if the block is nested.
+- `order` - Shows a dropdown of available order options. Hidden automatically if the block is nested.
+- `hideEmpty` - Shows a toggle switch for hiding empty terms.
+- `perPage` - Shows a number control for setting the number of terms per page.
+- `stickyTerms` - Shows a search field for adding specific terms to the top of the list.
+
+### Allowlisting taxonomies
+
+Unique to this block, the `allowedTaxonomies` property can be used to limit the taxonomies that can be selected in the block's taxonomy control. This is done by adding the taxonomy slugs to the array. If the property is not set, all taxonomies will be available. Setting the property to an empty array is not advised, as it will prevent any taxonomies from being selected.
+
+### Adding additional controls
+
+Controls may be added the same way as the core Query Loop block, [described here](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/extending-the-query-loop-block/#adding-additional-controls).
+
+### Altering the query on the front end
+
+The [term_query_loop_block_query_vars](#filter-term_query_loop_block_query_vars) filter is available to alter the query arguments before they are passed to the `WP_Term_Query` contructor. You can add the filter within a `pre_render_block` filter that checks for the Term Query Loop block's `namespace` attributes as [described here](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/extending-the-query-loop-block/#making-your-custom-query-work-on-the-front-end-side) to determine whether the filter should be added, as the query vars filter happens within the nested Term Template block (which does not have a namespace attribute).
+
+### Altering the preview query in the editor
+
+Filtering the query that happens in the editor must be done by filtering the REST response as [described here](https://developer.wordpress.org/block-editor/how-to-guides/block-tutorial/extending-the-query-loop-block/#making-your-custom-query-work-on-the-editor-side), except that you must use the `rest_{$this->taxonomy}_query` filter instead of the `rest_{$this->postType}_query` filter.
+
+## Filters
+
+### Filter `term_query_loop_block_query_vars`
+
+Filters the `WP_Term_Query` arguments for the block rendered on the front end. This can be compared to the `query_loop_block_query_vars` filter in the Query Loop block.
+
+```php
+apply_filters( 'term_query_loop_block_query_vars', array $query_vars, WP_Block $block, int $page );
+```
+
+#### Parameters
+
+- `$query_vars` (array): Array containing arguments for `WP_Term_Query` as parsed by the block context.
+- `$block` (WP_Block): The block instance.
+- `$page` (int): The current query's page.
+
+#### Example
+
+```php
+add_filter( 'pre_render_block', 'my_apply_term_query_loop_block_filters', 10, 2 );
+
+function my_apply_term_query_loop_block_filters( $pre_render, $parsed_block ) {
+	if ( 'my-plugin/my-term-query' !== $parsed_block['attrs']['namespace'] ) {
+		return $pre_render;
+	}
+
+	add_filter( 'term_query_loop_block_query_vars', 'my_term_query_loop_block_query_vars', 10, 3 );
+
+	return $pre_render;
+}
+
+add_filter( 'term_query_loop_block_query_vars', 'my_term_query_loop_block_query_vars', 10, 3 );
+
+function my_term_query_loop_block_query_vars( $query_vars, $block, $page ) {
+	// Alter the $query_vars here.
+	$query_vars['orderby'] = 'name';
+
+	return $query_vars;
+}
+```

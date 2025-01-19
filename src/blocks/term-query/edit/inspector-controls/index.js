@@ -42,7 +42,7 @@ export default function QueryInspectorControls( props ) {
 		'term-query/termId': termId,
 	} = context;
 	const allowedControls = useAllowedControls( attributes );
-	const taxonomies = useTaxonomies();
+	const taxonomies = useTaxonomies( attributes );
 
 	const updateTaxonomy = ( value ) => {
 		setQuery( { taxonomy: value } );
@@ -66,6 +66,7 @@ export default function QueryInspectorControls( props ) {
 		isControlAllowed( allowedControls, 'stickyTerms' );
 	const showSettingsPanel =
 		isNested || // If nested, show to display inherited settings.
+		showTaxControl ||
 		showInheritControl ||
 		showColumnsControl ||
 		showOrderControl ||
@@ -75,7 +76,7 @@ export default function QueryInspectorControls( props ) {
 		isControlAllowed( allowedControls, 'hideEmpty' );
 
 	const showPerPageControl = isControlAllowed( allowedControls, 'perPage' );
-	const showPagesControl = isControlAllowed( allowedControls, 'pages' );
+	const showPagesControl = false; // isControlAllowed( allowedControls, 'pages' ); // Not yet supported.
 
 	const showDisplayPanel =
 		showPerPageControl || showPagesControl;
@@ -114,6 +115,7 @@ export default function QueryInspectorControls( props ) {
 						>
 							{ showTaxControl && (
 								<TaxonomyControl
+									taxonomies={ taxonomies }
 									onChange={ updateTaxonomy }
 									taxonomy={ taxonomy }
 									inherited={ inherit }
