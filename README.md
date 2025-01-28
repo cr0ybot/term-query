@@ -132,6 +132,9 @@ function my_term_query_loop_block_query_vars( $query_vars, $block, $page ) {
 	// Alter the $query_vars here.
 	$query_vars['orderby'] = 'name';
 
+	// Remove the filter so it doesn't affect other queries.
+	remove_filter( 'term_query_loop_block_query_vars', 'my_term_query_loop_block_query_vars', 10 );
+
 	return $query_vars;
 }
 ```
