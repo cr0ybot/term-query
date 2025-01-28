@@ -117,16 +117,15 @@ apply_filters( 'term_query_loop_block_query_vars', array $query_vars, WP_Block $
 add_filter( 'pre_render_block', 'my_apply_term_query_loop_block_filters', 10, 2 );
 
 function my_apply_term_query_loop_block_filters( $pre_render, $parsed_block ) {
-	if ( 'my-plugin/my-term-query' !== $parsed_block['attrs']['namespace'] ) {
-		return $pre_render;
+	if (
+		isset( $parsed_block['attrs']['namespace'] )
+		&& 'my-plugin/my-term-query' === $parsed_block['attrs']['namespace']
+	) {
+		add_filter( 'term_query_loop_block_query_vars', 'my_term_query_loop_block_query_vars', 10, 3 );
 	}
-
-	add_filter( 'term_query_loop_block_query_vars', 'my_term_query_loop_block_query_vars', 10, 3 );
 
 	return $pre_render;
 }
-
-add_filter( 'term_query_loop_block_query_vars', 'my_term_query_loop_block_query_vars', 10, 3 );
 
 function my_term_query_loop_block_query_vars( $query_vars, $block, $page ) {
 	// Alter the $query_vars here.
