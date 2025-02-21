@@ -35,9 +35,9 @@ if ( ! function_exists( 'ctq_build_query_vars_from_term_query_block' ) ) {
 		$query_args['orderby']    = $context_query['orderBy'] ?? 'name';
 		$query_args['order']      = $context_query['order'] ?? 'ASC';
 		$query_args['hide_empty'] = $context_query['hideEmpty'] ?? false;
-		$query_args['include']    = $context_query['include'];
-		$query_args['exclude']    = $context_query['exclude'];
-		$query_args['parent']     = $context_query['parent'];
+		$query_args['include']    = $context_query['include'] ?? array();
+		$query_args['exclude']    = $context_query['exclude'] ?? array();
+		$query_args['parent']     = $context_query['parent'] ?? 0;
 
 		// Merge with additional args.
 		$query_args = array_merge( $query_args, $args );

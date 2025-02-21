@@ -31,7 +31,7 @@ registerBlockBindingsSource( {
 
 		// Get the term id & taxonomy from the context.
 		const termId = context['term-query/termId'];
-		const taxonomy = context['term-query/query']['taxonomy'];
+		const taxonomy = context['term-query/query']?.taxonomy;
 
 		if ( ! termId || ! taxonomy ) {
 			return values;
@@ -59,7 +59,7 @@ registerBlockBindingsSource( {
 	getFieldsList( { select, context } ) {
 		// Get the term id & taxonomy from the context.
 		const termId = context['term-query/termId'];
-		const taxonomy = context['term-query/query']['taxonomy'];
+		const taxonomy = context['term-query/query']?.taxonomy;
 
 		if ( ! termId || ! taxonomy ) {
 			return {};
@@ -94,7 +94,7 @@ registerBlockBindingsSource( {
 
 		// Get the term id & taxonomy from the context.
 		const termId = context['term-query/termId'];
-		const taxonomy = context['term-query/query']['taxonomy'];
+		const taxonomy = context['term-query/query']?.taxonomy;
 
 		if ( ! termId || ! taxonomy ) {
 			return values;
@@ -148,7 +148,7 @@ registerBlockBindingsSource( {
 	getFieldsList( { select, context } ) {
 		// Get the term id & taxonomy from the context.
 		const termId = context['term-query/termId'];
-		const taxonomy = context['term-query/query']['taxonomy'];
+		const taxonomy = context['term-query/query']?.taxonomy;
 
 		if ( ! termId || ! taxonomy ) {
 			return {};
