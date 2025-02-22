@@ -33,7 +33,7 @@ if ( ! function_exists( 'ctq_build_query_vars_from_term_query_block' ) ) {
 		$query_args['offset']     = ( ( $page - 1 ) * $per_page );
 		$query_args['number']     = $per_page;
 		$query_args['orderby']    = $context_query['orderBy'] ?? 'name';
-		$query_args['order']      = $context_query['order'] ?? 'ASC';
+		$query_args['order']      = strtoupper( $context_query['order'] ?? 'asc' );
 		$query_args['hide_empty'] = $context_query['hideEmpty'] ?? false;
 		$query_args['include']    = $context_query['include'] ?? array();
 		$query_args['exclude']    = $context_query['exclude'] ?? array();
