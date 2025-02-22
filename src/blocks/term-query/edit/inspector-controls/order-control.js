@@ -16,6 +16,10 @@ const orderOptions = [
 		value: 'name/desc',
 	},
 	{
+		label: __( 'Manual Term Order' ),
+		value: 'term_order/asc',
+	},
+	{
 		label: __( 'Most used' ),
 		value: 'count/desc',
 	},
