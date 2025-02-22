@@ -13,7 +13,7 @@
 
 // If query context is available, force the block to inherit the query.
 // Check the parsed block for an empty query attribute to bypass the defaults.
-$inherit = isset( $block->context['term-query/query'] ) || ! isset( $block->parsed_block['attrs']['query'] ) || $block->parsed_block['attrs']['query']['inherit'] ?? true;
+$inherit = isset( $block->context['term-query/query'] ) || ! isset( $block->parsed_block['attrs']['query'] ) || ( isset( $block->parsed_block['attrs']['query']['inherit'] ) && $block->parsed_block['attrs']['query']['inherit'] ?? true );
 
 if ( ! $inherit ) {
 	$query_context        = $attributes['query'];
