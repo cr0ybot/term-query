@@ -24,8 +24,7 @@ const TERM_KEYS = [
  * Term binding for children of terms block.
  *
  * `termId`/`taxonomy` are also declared so this still resolves when nested
- * inside core's `core/term-template` (e.g. after a block transform), which
- * provides context under those unprefixed keys.
+ * inside core's `core/term-template`.
  */
 registerBlockBindingsSource( {
 	name: 'term-query/term',
@@ -106,8 +105,7 @@ registerBlockBindingsSource( {
  * Term meta binding for children of terms block.
  *
  * `termId`/`taxonomy` are also declared so this still resolves when nested
- * inside core's `core/term-template` (e.g. after a block transform), which
- * only provides context under those unprefixed keys.
+ * inside core's `core/term-template`.
  */
 registerBlockBindingsSource( {
 	name: 'term-query/term-meta',
