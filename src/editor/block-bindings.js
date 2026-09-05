@@ -22,28 +22,42 @@ const TERM_KEYS = [
 
 /**
  * Term binding for children of terms block.
+ *
+ * `termId`/`taxonomy` are also declared so this still resolves when nested
+ * inside core's `core/term-template` (e.g. after a block transform), which
+ * provides context under those unprefixed keys.
  */
 registerBlockBindingsSource( {
-	'name': 'term-query/term',
-	usesContext: [ 'term-query/termId', 'term-query/query' ],
+	name: 'term-query/term',
+	usesContext: [
+		'term-query/termId',
+		'term-query/query',
+		'termId',
+		'taxonomy',
+	],
 	getValues( { select, context, bindings } ) {
 		const values = {};
 
 		// Get the term id & taxonomy from the context.
-		const termId = context['term-query/termId'];
-		const taxonomy = context['term-query/query']?.taxonomy;
+		const termId = context[ 'term-query/termId' ] ?? context[ 'termId' ];
+		const taxonomy =
+			context[ 'term-query/query' ]?.taxonomy ?? context[ 'taxonomy' ];
 
 		if ( ! termId || ! taxonomy ) {
 			return values;
 		}
 
 		// Get the term object from the store.
-		const term = select( coreDataStore ).getEntityRecord( 'taxonomy', taxonomy, termId );
+		const term = select( coreDataStore ).getEntityRecord(
+			'taxonomy',
+			taxonomy,
+			termId
+		);
 		if ( ! term ) {
 			return values;
 		}
 
-		for ( const [attributeName, source ] of Object.entries( bindings ) ) {
+		for ( const [ attributeName, source ] of Object.entries( bindings ) ) {
 			const { key } = source.args;
 
 			if ( TERM_KEYS.includes( key ) ) {
@@ -58,15 +72,20 @@ registerBlockBindingsSource( {
 	},
 	getFieldsList( { select, context } ) {
 		// Get the term id & taxonomy from the context.
-		const termId = context['term-query/termId'];
-		const taxonomy = context['term-query/query']?.taxonomy;
+		const termId = context[ 'term-query/termId' ] ?? context[ 'termId' ];
+		const taxonomy =
+			context[ 'term-query/query' ]?.taxonomy ?? context[ 'taxonomy' ];
 
 		if ( ! termId || ! taxonomy ) {
 			return {};
 		}
 
 		// Get the term object from the store.
-		const term = select( coreDataStore ).getEntityRecord( 'taxonomy', taxonomy, termId );
+		const term = select( coreDataStore ).getEntityRecord(
+			'taxonomy',
+			taxonomy,
+			termId
+		);
 		if ( ! term ) {
 			return {};
 		}
@@ -77,43 +96,56 @@ registerBlockBindingsSource( {
 				acc[ key ] = {
 					label: __( key, 'term-query' ),
 					value: term[ key ],
-				}
+				};
 			}
 		}, {} );
-	}
+	},
 } );
 
 /**
  * Term meta binding for children of terms block.
+ *
+ * `termId`/`taxonomy` are also declared so this still resolves when nested
+ * inside core's `core/term-template` (e.g. after a block transform), which
+ * only provides context under those unprefixed keys.
  */
 registerBlockBindingsSource( {
-	'name': 'term-query/term-meta',
-	usesContext: [ 'term-query/termId', 'term-query/query' ],
+	name: 'term-query/term-meta',
+	usesContext: [
+		'term-query/termId',
+		'term-query/query',
+		'termId',
+		'taxonomy',
+	],
 	getValues( { select, context, bindings } ) {
 		const values = {};
 
 		// Get the term id & taxonomy from the context.
-		const termId = context['term-query/termId'];
-		const taxonomy = context['term-query/query']?.taxonomy;
+		const termId = context[ 'term-query/termId' ] ?? context[ 'termId' ];
+		const taxonomy =
+			context[ 'term-query/query' ]?.taxonomy ?? context[ 'taxonomy' ];
 
 		if ( ! termId || ! taxonomy ) {
 			return values;
 		}
 
 		// Get the term object from the store.
-		const term = select( coreDataStore ).getEntityRecord( 'taxonomy', taxonomy, termId );
+		const term = select( coreDataStore ).getEntityRecord(
+			'taxonomy',
+			taxonomy,
+			termId
+		);
 		if ( ! term ) {
 			return values;
 		}
 
 		const { meta } = term;
 
-		for ( const [attributeName, source ] of Object.entries( bindings ) ) {
+		for ( const [ attributeName, source ] of Object.entries( bindings ) ) {
 			const { args } = source;
 			const { key, transform } = args;
 
 			if ( meta[ key ] ) {
-
 				/**
 				 * Filter all term meta values.
 				 *
@@ -122,7 +154,12 @@ registerBlockBindingsSource( {
 				 * @param {Function} select The select function.
 				 * @return {*} The filtered value.
 				 */
-				let value = applyFilters( 'termQuery.termMeta', meta[ key ], args, select );
+				let value = applyFilters(
+					'termQuery.termMeta',
+					meta[ key ],
+					args,
+					select
+				);
 
 				if ( transform ) {
 					/**
@@ -133,7 +170,12 @@ registerBlockBindingsSource( {
 					 * @param {Function} select The select function.
 					 * @return {*} The filtered value.
 					 */
-					values[ attributeName ] = applyFilters( `termQuery.termMetaTransform.${transform}`, value, args, select );
+					values[ attributeName ] = applyFilters(
+						`termQuery.termMetaTransform.${ transform }`,
+						value,
+						args,
+						select
+					);
 				} else {
 					values[ attributeName ] = value;
 				}
@@ -147,15 +189,20 @@ registerBlockBindingsSource( {
 	},
 	getFieldsList( { select, context } ) {
 		// Get the term id & taxonomy from the context.
-		const termId = context['term-query/termId'];
-		const taxonomy = context['term-query/query']?.taxonomy;
+		const termId = context[ 'term-query/termId' ] ?? context[ 'termId' ];
+		const taxonomy =
+			context[ 'term-query/query' ]?.taxonomy ?? context[ 'taxonomy' ];
 
 		if ( ! termId || ! taxonomy ) {
 			return {};
 		}
 
 		// Get the term object from the store.
-		const term = select( coreDataStore ).getEntityRecord( 'taxonomy', taxonomy, termId );
+		const term = select( coreDataStore ).getEntityRecord(
+			'taxonomy',
+			taxonomy,
+			termId
+		);
 		if ( ! term ) {
 			return {};
 		}
@@ -169,5 +216,5 @@ registerBlockBindingsSource( {
 				value: meta[ key ],
 			};
 		}, {} );
-	}
+	},
 } );
