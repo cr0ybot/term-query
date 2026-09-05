@@ -22,22 +22,26 @@ add_action( 'init', __NAMESPACE__ . '\\register' );
  */
 function register() {
 	// Term binding for children of terms block.
+	// `termId` is also declared so this still resolves when nested inside
+	// core's `core/term-template`.
 	register_block_bindings_source(
 		'term-query/term',
 		array(
 			'label'              => __( 'Term', 'term-query' ),
 			'get_value_callback' => __NAMESPACE__ . '\\get_term_value',
-			'uses_context'       => array( 'term-query/termId' ),
+			'uses_context'       => array( 'term-query/termId', 'termId' ),
 		)
 	);
 
 	// Term meta binding for children of term block.
+	// `termId` is also declared so this still resolves when nested inside
+	// core's `core/term-template`.
 	register_block_bindings_source(
 		'term-query/term-meta',
 		array(
 			'label'              => __( 'Term Meta', 'term-query' ),
 			'get_value_callback' => __NAMESPACE__ . '\\get_term_meta_value',
-			'uses_context'       => array( 'term-query/termId' ),
+			'uses_context'       => array( 'term-query/termId', 'termId' ),
 		)
 	);
 }
@@ -50,15 +54,9 @@ function register() {
  * @param string   $attribute_name The attribute name.
  */
 function get_term_value( array $source_args, WP_Block $block_instance, string $attribute_name ) {
-	if (
-		empty( $source_args['key'] )
-		|| ! isset( $block_instance->context['term-query/termId'] )
-	) {
-		return null;
-	}
+	$term_id = $block_instance->context['term-query/termId'] ?? $block_instance->context['termId'] ?? null;
 
-	$term_id = $block_instance->context['term-query/termId'];
-	if ( empty( $term_id ) ) {
+	if ( empty( $source_args['key'] ) || empty( $term_id ) ) {
 		return null;
 	}
 
@@ -95,15 +93,9 @@ function get_term_value( array $source_args, WP_Block $block_instance, string $a
  * @param string   $attribute_name The attribute name.
  */
 function get_term_meta_value( array $source_args, WP_Block $block_instance, string $attribute_name ) {
-	if (
-		empty( $source_args['key'] )
-		|| ! isset( $block_instance->context['term-query/termId'] )
-	) {
-		return null;
-	}
+	$term_id = $block_instance->context['term-query/termId'] ?? $block_instance->context['termId'] ?? null;
 
-	$term_id = $block_instance->context['term-query/termId'];
-	if ( empty( $term_id ) ) {
+	if ( empty( $source_args['key'] ) || empty( $term_id ) ) {
 		return null;
 	}
 

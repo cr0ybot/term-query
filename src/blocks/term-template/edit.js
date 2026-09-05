@@ -24,6 +24,9 @@ import { list, grid } from '@wordpress/icons';
 import { getQueryContextFromTemplate } from './utils';
 import withTermQueryProvider from '../../queries/withTermQueryProvider';
 
+// Stable empty array reference to avoid unnecessary re-renders.
+const EMPTY_ARRAY = [];
+
 const TEMPLATE = [
 	[ 'core/heading', {
 		metadata: {
@@ -144,7 +147,7 @@ function TermTemplateEdit( {
 } ) {
 	const { type: layoutType, columnCount = 3 } = layout || {};
 	const [ activeBlockContextId, setActiveBlockContextId ] = useState();
-	const { terms, termsLoading, blocks } = useSelect(
+	const { fetchedStickyTerms, fetchedTerms, termsLoading, blocks } = useSelect(
 		( select ) => {
 			const { getEntityRecords } = select( coreStore );
 			const { getBlocks } = select( blockEditorStore );
@@ -168,7 +171,7 @@ function TermTemplateEdit( {
 				query.hide_empty = true;
 			}
 
-			let fetchedStickyTerms = [];
+			let fetchedStickyTerms = EMPTY_ARRAY;
 			if ( stickyTerms?.length ) {
 				fetchedStickyTerms = getEntityRecords( 'taxonomy', taxonomy, {
 					include: stickyTerms,
@@ -225,13 +228,11 @@ function TermTemplateEdit( {
 			);
 
 			return {
-				terms: [
-					...(fetchedStickyTerms ?? []),
-					...(getEntityRecords( 'taxonomy', usedTaxonomy, {
-						...query,
-						...restQueryArgs,
-					} ) ?? []),
-				],
+				fetchedStickyTerms,
+				fetchedTerms: getEntityRecords( 'taxonomy', usedTaxonomy, {
+					...query,
+					...restQueryArgs,
+				} ),
 				termsLoading,
 				blocks: getBlocks( clientId ),
 			};
@@ -251,6 +252,10 @@ function TermTemplateEdit( {
 			restQueryArgs,
 			previewTaxonomy,
 		]
+	);
+	const terms = useMemo(
+		() => [ ...( fetchedStickyTerms ?? [] ), ...( fetchedTerms ?? [] ) ],
+		[ fetchedStickyTerms, fetchedTerms ]
 	);
 	const blockContexts = useMemo(
 		() =>
