@@ -17,14 +17,16 @@ import edit from './edit';
 import save from './save';
 import variations from './variations';
 import deprecated from './deprecated';
+import transforms from './transforms';
 
 /**
  * Register block
  */
-registerBlockType(block, {
+registerBlockType( block, {
 	icon,
 	edit,
 	save,
 	variations,
 	deprecated,
-});
+	transforms,
+} );
